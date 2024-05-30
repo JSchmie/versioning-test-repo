@@ -53,6 +53,16 @@ jobs:
           echo "version=$clean_version" >> $GITHUB_ENV
           echo "Version determined: $clean_version"
 
+      - name: Check if Version Already Exists in Tags
+        run: |
+          version="${{ env.version }}"
+          if git tag --list | grep -q "^$version$"; then
+            echo "Version $version already exists in tags."
+            exit 1
+          else
+            echo "Version $version does not exist in tags."
+          fi
+
       - name: Check Version in CHANGELOG
         id: check_version
         run: |
