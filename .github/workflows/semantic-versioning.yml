@@ -70,7 +70,8 @@ jobs:
         id: extract_notes
         run: |
           version="${{ env.new_tag }}"
-          release_notes=$(awk '/^## \[?'"$version"'\]?/ {flag=1; next} /^## \[?/ {flag=0} flag' CHANGELOG.md)
+          clean_version="${version#v}"
+          release_notes=$(awk '/^## \['"$clean_version"'\]/,/^## \[/' CHANGELOG.md | sed '$d')
           echo "$release_notes" > release_notes.md
           echo "RELEASE_NOTES=$(cat release_notes.md)" >> $GITHUB_ENV
 
