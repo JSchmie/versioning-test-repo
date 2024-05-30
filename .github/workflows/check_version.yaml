@@ -1,0 +1,45 @@
+name: Check Version in Changelog
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Version from PR
+        id: extract_version
+        run: |
+          pr_body="${{ github.event.pull_request.body }}"
+          pr_title="${{ github.event.pull_request.title }}"
+          version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
+
+          if [[ $pr_body =~ $version_regex ]]; then
+            version=${BASH_REMATCH[0]}
+          elif [[ $pr_title =~ $version_regex ]]; then
+            version=${BASH_REMATCH[0]}
+          else
+            echo "No version specified in the pull request."
+            exit 1
+          fi
+
+          clean_version="${version#v}"
+          echo "version=$clean_version" >> $GITHUB_ENV
+          echo "Version extracted: $clean_version"
+
+      - name: Check Version in CHANGELOG
+        run: |
+          version="${{ env.version }}"
+          if ! grep -q "^## \[$version\]" CHANGELOG.md; then
+            echo "Version $version not found in CHANGELOG.md."
+            exit 1
+          else
+            echo "Version $version found in CHANGELOG.md."
+          fi
