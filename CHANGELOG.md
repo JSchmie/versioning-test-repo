@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.2] - 2024-05-30
+## [0.1.3] - 2024-05-30
 
 - We are just bumbping the version
 
