@@ -1,0 +1,71 @@
+name: Semantic Versioning for Tags
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  bump-version:
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Bump Version and Tag
+        id: bump_version
+        run: |
+          # Fetch the latest tags from the remote
+          git fetch --tags
+
+          # Get the latest tag
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+          # Check if the approval message includes a version
+          pr_body="${{ github.event.pull_request.body }}"
+          if [[ $pr_body =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+          else
+            # Split the latest tag into parts
+            IFS='.' read -r -a parts <<< "${latest_tag#v}"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            patch=$((patch + 1))
+          fi
+
+          # Create a new tag
+          new_tag="v$major.$minor.$patch"
+          echo "Bumping version from $latest_tag to $new_tag"
+          echo "::set-output name=new_tag::$new_tag"
+
+          # Tag the new version
+          git tag $new_tag
+
+          # Configure GitHub token authentication
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+
+          # Push the new tag to the remote repository
+          git push origin $new_tag
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+          release_name: Release ${{ steps.bump_version.outputs.new_tag }}
+          body_path: ./CHANGELOG.md
+          draft: false
+          prerelease: false
