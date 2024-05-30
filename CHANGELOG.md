@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.1.2] - Unreleased
+## [0.1.2] - 2024-05-30
+
+- We are just bumbping the version
+
+## [0.1.2] - 2024-05-30
 
 - Something new
 
