@@ -70,9 +70,14 @@ jobs:
         id: extract_notes
         run: |
           version="${{ env.new_tag }}"
-          version_section=$(awk '/^## \[?'"$version"'\]?/ {flag=1; next} /^## \[?/ {flag=0} flag' CHANGELOG.md)
-          echo "$version_section" > release_notes.md
+          release_notes=$(awk '/^## \[?'"$version"'\]?/ {flag=1; next} /^## \[?/ {flag=0} flag' CHANGELOG.md)
+          echo "$release_notes" > release_notes.md
           echo "RELEASE_NOTES=$(cat release_notes.md)" >> $GITHUB_ENV
+
+      - name: Display Release Notes (Debug)
+        run: |
+          echo "Release notes extracted:"
+          cat release_notes.md
 
       - name: Create Release
         uses: actions/create-release@v1
