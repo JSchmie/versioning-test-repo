@@ -18,6 +18,8 @@ jobs:
 
       - name: Bump Version and Tag
         id: bump_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           # Fetch the latest tags from the remote
           git fetch --tags
