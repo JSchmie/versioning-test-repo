@@ -70,9 +70,9 @@ jobs:
         id: extract_notes
         run: |
           version="${{ env.new_tag }}"
-          version_section=$(awk '/^## \[?'"$version"'\]?/ {flag=1; next} /^## \[?/ {flag=0} flag {print}' CHANGELOG.md)
+          version_section=$(awk '/^## \[?'"$version"'\]?/ {flag=1; next} /^## \[?/ {flag=0} flag' CHANGELOG.md)
           echo "$version_section" > release_notes.md
-          echo "release_notes=$(cat release_notes.md)" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=$(cat release_notes.md)" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -81,6 +81,6 @@ jobs:
         with:
           tag_name: ${{ env.new_tag }}
           release_name: Release ${{ env.new_tag }}
-          body: ${{ env.release_notes }}
+          body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
