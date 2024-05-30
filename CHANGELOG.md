@@ -2,6 +2,7 @@
 - Added feature XYZ
 - Improved ABC
 - update version 
+- something extra
 
 # Changelog
 
