@@ -27,12 +27,21 @@ jobs:
           # Get the latest tag, or initialize to v0.0.0 if no tags are found
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
 
-          # Check if the approval message includes a version
+          # Extract version from PR title or body
           pr_body="${{ github.event.pull_request.body }}"
-          if [[ $pr_body =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+          pr_title="${{ github.event.pull_request.title }}"
+          version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
+
+          if [[ $pr_body =~ $version_regex ]]; then
             major=${BASH_REMATCH[1]}
             minor=${BASH_REMATCH[2]}
             patch=${BASH_REMATCH[3]}
+            new_tag="v$major.$minor.$patch"
+          elif [[ $pr_title =~ $version_regex ]]; then
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+            new_tag="v$major.$minor.$patch"
           else
             # Split the latest tag into parts
             IFS='.' read -r -a parts <<< "${latest_tag#v}"
@@ -40,12 +49,13 @@ jobs:
             minor=${parts[1]}
             patch=${parts[2]}
             patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
           fi
 
-          # Create a new tag
-          new_tag="v$major.$minor.$patch"
           echo "Bumping version from $latest_tag to $new_tag"
-          echo "::set-output name=new_tag::$new_tag"
+
+          # Set the new tag as an environment variable
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
 
           # Tag the new version
           git tag $new_tag
@@ -61,8 +71,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ steps.bump_version.outputs.new_tag }}
-          release_name: Release ${{ steps.bump_version.outputs.new_tag }}
+          tag_name: ${{ env.new_tag }}
+          release_name: Release ${{ env.new_tag }}
           body_path: ./CHANGELOG.md
           draft: false
           prerelease: false
