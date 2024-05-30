@@ -71,14 +71,18 @@ jobs:
         run: |
           version="${{ env.new_tag }}"
           clean_version="${version#v}"
-          release_notes=$(awk '/^## \['"$clean_version"'\]/,/^## \[/' CHANGELOG.md | sed '$d')
-          echo "$release_notes" > release_notes.md
-          echo "RELEASE_NOTES=$(cat release_notes.md)" >> $GITHUB_ENV
-
-      - name: Display Release Notes (Debug)
-        run: |
-          echo "Release notes extracted:"
-          cat release_notes.md
+          release_notes=$(awk -v version="$clean_version" '
+            BEGIN { flag=0 }
+            # Start flagging when the version section is found
+            /^## \[.*\]/ {
+              if (flag) exit  # Exit when the next section starts
+            }
+            /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
+            flag { print }  # Print lines while flag is 1
+          ' CHANGELOG.md)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$release_notes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
