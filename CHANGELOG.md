@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.2] - Unreleased
+
+- Something new
+
 ## [0.1.1] - 2024-05-30
 
 - Added new CI to check Realse notes before merge
