@@ -16,19 +16,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Git
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
       - name: Bump Version and Tag
         id: bump_version
         run: |
           # Fetch the latest tags from the remote
           git fetch --tags
 
-          # Get the latest tag
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          # Get the latest tag, or initialize to v0.0.0 if no tags are found
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
 
           # Check if the approval message includes a version
           pr_body="${{ github.event.pull_request.body }}"
