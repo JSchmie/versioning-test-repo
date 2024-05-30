@@ -5,6 +5,7 @@
 - Improved ABC
 - update version 
 - something extra
+- change ci to get informations abou the version 
 
 ## [Unreleased]
 - Initial setup and testing
