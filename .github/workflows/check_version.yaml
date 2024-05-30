@@ -14,25 +14,43 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract Version from PR
+      - name: Extract and Determine Version
         id: extract_version
         run: |
+          # Fetch the latest tags from the remote
+          git fetch --tags
+
+          # Get the latest tag, or initialize to v0.0.0 if no tags are found
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+
+          # Extract version from PR title or body
           pr_body="${{ github.event.pull_request.body }}"
           pr_title="${{ github.event.pull_request.title }}"
           version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
 
           if [[ $pr_body =~ $version_regex ]]; then
-            version=${BASH_REMATCH[0]}
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+            new_tag="v$major.$minor.$patch"
           elif [[ $pr_title =~ $version_regex ]]; then
-            version=${BASH_REMATCH[0]}
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+            new_tag="v$major.$minor.$patch"
           else
-            echo "No version specified in the pull request."
-            exit 1
+            # Split the latest tag into parts
+            IFS='.' read -r -a parts <<< "${latest_tag#v}"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
           fi
 
-          clean_version="${version#v}"
+          clean_version="${new_tag#v}"
           echo "version=$clean_version" >> $GITHUB_ENV
-          echo "Version extracted: $clean_version"
+          echo "Version determined: $clean_version"
 
       - name: Check Version in CHANGELOG
         id: check_version
