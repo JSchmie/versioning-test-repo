@@ -88,21 +88,3 @@ jobs:
           else
             echo "Version $version found in CHANGELOG.md."
           fi
-
-      - name: Add Version to CHANGELOG
-        if: env.is_docs_branch != 'true' && steps.check_version.outcome == 'failure'
-        run: |
-          version="${{ env.version }}"
-          date=$(date +'%Y-%m-%d')
-          changelog_entry="## [$version] - $date\n- Description of changes\n"
-          echo -e "$changelog_entry\n$(cat CHANGELOG.md)" > CHANGELOG.md
-          echo "Added version $version to CHANGELOG.md."
-
-      - name: Commit Changes
-        if: env.is_docs_branch != 'true' && steps.check_version.outcome == 'failure'
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "Add version ${{ env.version }} to CHANGELOG.md"
-          git push
