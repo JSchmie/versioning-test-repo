@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1] - 2024-05-30
+
+- added check for docs
+
 ## [0.2.0] - 2024-05-30
 
 Hey there, audio adventurers and transcription titans! We've got a WHALE of an update for you! 🐋 Introducing the latest and greatest version of our CLI, lovingly nicknamed the 'Whispering Walrus' Edition. Why? Because it's BIG, it's AWESOME, and it talks...a LOT! 🗣️

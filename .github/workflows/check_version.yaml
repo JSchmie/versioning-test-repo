@@ -14,7 +14,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      
+      - name: Check if Source Branch is docs
+        id: check_docs_branch
+        run: |
+          pr_head_ref="${{ github.event.pull_request.head.ref }}"
+          if [[ "$pr_head_ref" == "docs" ]]; then
+            echo "This is a docs branch merge. Exiting without creating a tag."
+            exit 0
+          fi
+  
       - name: Extract and Determine Version
         id: extract_version
         run: |
