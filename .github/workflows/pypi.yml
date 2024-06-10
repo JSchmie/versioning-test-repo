@@ -5,8 +5,7 @@ on:
     workflows: [Semantic Versioning for Tags]
     types:
       - completed
-    branches:
-        - main
+
   pull_request:
     branches:
       - develop
