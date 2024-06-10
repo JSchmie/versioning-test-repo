@@ -3,7 +3,7 @@ name: Test CI Workflow
 on:
   push:
     tags:
-      - '*' # Trigger on all tag pushes
+      - 'v*' # Trigger on all tag pushes
   pull_request:
     types: [closed]
     branches:
