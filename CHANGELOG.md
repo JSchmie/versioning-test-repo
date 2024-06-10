@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.2] - 2024-06-10
+
+- added token to checkout in check_version.yaml
+
 ## [0.2.1] - 2024-05-30
 
 - added check for docs
