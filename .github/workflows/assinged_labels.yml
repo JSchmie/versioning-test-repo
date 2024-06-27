@@ -1,0 +1,20 @@
+name: Show Assigned Labels
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  show-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: List Assigned Labels
+        run: |
+          echo "Labels assigned to this pull request:"
+          echo ${{ github.event.pull_request.labels }}
