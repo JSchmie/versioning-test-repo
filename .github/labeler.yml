@@ -1,0 +1,16 @@
+# .github/labeler.yml
+
+# Label for documentation changes
+docs:
+  - 'docs/**'
+  - 'README.md'
+
+# Label for Docker changes
+docker:
+  - 'Dockerfile'
+  - 'docker-compose.yml'
+
+# Label for release-related changes
+release:
+  - 'src/**'
+  - 'pyproject.toml'
