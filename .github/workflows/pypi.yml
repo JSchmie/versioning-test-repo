@@ -56,7 +56,10 @@ jobs:
   publish-to-pypi:
     name: Publish to PyPI
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.publish_to_pypi == 'true' || (needs.test-install.result == 'success' && needs.Build-and-publish-to-Test-PyPI.result == 'success') }}
+    if: >
+        github.event.inputs.publish_to_pypi == 'true' || (github.event_name == 'workflow_run' &&
+        github.event.workflow_run.conclusion == 'success') || (github.event_name == 'pull_request' &&
+        github.event.pull_request.merged == true)
     steps:
       - name: Get github.ref
         run: |
