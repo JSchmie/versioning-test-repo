@@ -3,16 +3,21 @@
 # Label for documentation changes
 documentation:
   - changed-files:
-    any-glob-to-any-file:
+    - any-glob-to-any-file:
       - 'docs/**'
       - 'README.md'
 
 # Label for Docker changes
 docker:
-  - 'Dockerfile'
-  - 'docker-compose.yml'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'Dockerfile'
+      - 'docker-compose.yml'
 
 # Label for release-related changes
 release:
-  - 'src/**'
-  - 'pyproject.toml'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/**'
+      - 'pyproject.toml'
+  - base-branch: 'main'
