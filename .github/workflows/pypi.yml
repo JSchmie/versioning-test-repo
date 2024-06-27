@@ -11,17 +11,23 @@ on:
       - develop
     types:
       - closed
+
   workflow_dispatch:
     inputs:
       test:
         description: "Run tests"
         default: true
         type: boolean
+      publish_to_pypi:
+        description: "Publish to PyPI"
+        default: false
+        type: boolean
 
-jobs: 
+jobs:
   Build-and-publish-to-Test-PyPI:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' }}
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
@@ -29,6 +35,7 @@ jobs:
         run: echo "Setting up environment for testing"
 
   test-install:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' }}
     name: Test Installation from TestPyPI
     needs: Build-and-publish-to-Test-PyPI
     runs-on: ubuntu-latest
@@ -48,15 +55,16 @@ jobs:
 
   publish-to-pypi:
     name: Publish to PyPI
-    needs: test-install
+    needs: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' ? ['test-install', 'Build-and-publish-to-Test-PyPI'] : [] }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_to_pypi == 'true' || needs.test-install.result == 'success' }}
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Get github.ref
         run: |
           echo "github.ref: ${{ github.ref }}"
 
-      - name: Checkout Repository (Main)
-        if: startsWith(github.ref, 'refs/heads/main')
+      - name: Checkout Repository Tags
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
