@@ -24,6 +24,16 @@ on:
         type: boolean
 
 jobs:
+  workflow-run-result:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Simulate Setting up Environment 📦
+        run: |
+          echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
+
   Build-and-publish-to-Test-PyPI:
     if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' }}
     runs-on: ubuntu-latest
