@@ -17,4 +17,7 @@ jobs:
       - name: List Assigned Labels
         run: |
           echo "Labels assigned to this pull request:"
-          echo ${{ github.event.pull_request.labels }}
+          for label in $(jq -r '.[] | .name' <<< "${{ toJson(github.event.pull_request.labels) }}"); do
+            echo "$label"
+          done
+        shell: bash
