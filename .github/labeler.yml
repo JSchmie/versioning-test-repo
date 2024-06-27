@@ -1,7 +1,7 @@
 # .github/labeler.yml
 
 # Label for documentation changes
-docs:
+documentation:
   - 'docs/**'
   - 'README.md'
 
