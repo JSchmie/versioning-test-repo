@@ -7,15 +7,13 @@ on:
 jobs:
   label:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:   
       - name: Apply Labels
         uses: actions/labeler@v5
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
+          sync-labels: true
