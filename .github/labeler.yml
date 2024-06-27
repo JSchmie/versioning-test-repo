@@ -6,13 +6,14 @@ documentation:
     - any-glob-to-any-file:
       - 'docs/**'
       - 'README.md'
+      
 
 # Label for Docker changes
 docker:
   - changed-files:
     - any-glob-to-any-file:
-      - 'Dockerfile'
-      - 'docker-compose.yml'
+      - '*docker*'
+      - 'Docker*'
 
 # Label for release-related changes
 release:
@@ -21,4 +22,16 @@ release:
       - any-glob-to-any-file:
         - 'src/**'
         - 'pyproject.toml'
+        - 'LICENCE'
     - base-branch: 'main'
+
+workflows:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '.github/workflows/*'
+        - '.github/labeler.yml'
+
+github: 
+  - changed-files:
+      - any-glob-to-any-file:
+        - '.gitignore'
