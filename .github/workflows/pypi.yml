@@ -55,9 +55,8 @@ jobs:
 
   publish-to-pypi:
     name: Publish to PyPI
-    needs: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' ? ['test-install', 'Build-and-publish-to-Test-PyPI'] : [] }}
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_to_pypi == 'true' || needs.test-install.result == 'success' }}
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.publish_to_pypi == 'true' || (needs.test-install.result == 'success' && needs.Build-and-publish-to-Test-PyPI.result == 'success') }}
     steps:
       - name: Get github.ref
         run: |
