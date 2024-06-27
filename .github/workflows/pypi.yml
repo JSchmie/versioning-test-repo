@@ -24,22 +24,10 @@ on:
         type: boolean
 
 jobs:
-  workflow-run-result:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-      - name: Simulate Setting up Environment 📦
-        run: |
-          echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
-          echo ${{ github.event.inputs.publish_to_pypi }}
-          echo ${{ github.event.pull_request.merged }}
-
   Build-and-publish-to-Test-PyPI:
     if: >
-      (github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false') &&
-      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test == true) ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,8 +38,8 @@ jobs:
 
   test-install:
     if: >
-      (github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false') &&
-      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test == true) ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
 
     name: Test Installation from TestPyPI
     needs: Build-and-publish-to-Test-PyPI
@@ -74,7 +62,7 @@ jobs:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     if: >
-      github.event.inputs.publish_to_pypi == 'true' || 
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_to_pypi == true) || 
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
   
