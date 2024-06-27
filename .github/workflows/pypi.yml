@@ -55,8 +55,8 @@ jobs:
         run: |
           echo "github.ref: ${{ github.ref }}"
 
-      - name: Checkout Repository Tags
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Checkout Repository (Main)
+        if: startsWith(github.ref, 'refs/heads/main')
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
