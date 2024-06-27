@@ -2,8 +2,9 @@
 
 # Label for documentation changes
 documentation:
-  - 'docs/**'
-  - 'README.md'
+  - changed-files:
+    - 'docs/**'
+    - 'README.md'
 
 # Label for Docker changes
 docker:
