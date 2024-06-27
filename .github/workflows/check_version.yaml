@@ -2,19 +2,21 @@ name: Check and Add Version in Changelog
 
 on:
   pull_request:
+    types: [labeled, synchronize, reopened]
     branches:
       - main
       - develop
 
 jobs:
   check-and-add-version:
+    if: >
+      contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if Source Branch is docs
         id: check_docs_branch
@@ -29,7 +31,6 @@ jobs:
           fi
 
       - name: Extract and Determine Version
-        if: env.is_docs_branch != 'true'
         id: extract_version
         run: |
           # Fetch the latest tags from the remote
@@ -68,7 +69,6 @@ jobs:
           echo "Version determined: $clean_version"
 
       - name: Check if Version Already Exists in Tags
-        if: env.is_docs_branch != 'true'
         run: |
           version="${{ env.version }}"
           if git tag --list | grep -q "^$version$"; then
@@ -79,7 +79,6 @@ jobs:
           fi
 
       - name: Check Version in CHANGELOG
-        if: env.is_docs_branch != 'true'
         id: check_version
         run: |
           version="${{ env.version }}"

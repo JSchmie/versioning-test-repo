@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.6] - 2024-06-27
+
+- added a PyPI action
+- updated semver action to work with labels
+- added autolabel acrtion to automatically create labels based on changed files
+
 ## [0.2.2] - 2024-06-10
 
 - added token to checkout in check_version.yaml
