@@ -33,6 +33,8 @@ jobs:
       - name: Simulate Setting up Environment 📦
         run: |
           echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo ${{ github.event.inputs.publish_to_pypi }}
+          echo ${{ github.event.pull_request.merged }}
 
   Build-and-publish-to-Test-PyPI:
     if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish_to_pypi == 'false' }}
