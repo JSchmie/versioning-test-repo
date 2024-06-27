@@ -16,8 +16,9 @@ docker:
 
 # Label for release-related changes
 release:
-  - changed-files:
-    - any-glob-to-any-file:
-      - 'src/**'
-      - 'pyproject.toml'
-  - base-branch: 'main'
+  - all:
+    - changed-files:
+      - any-glob-to-any-file:
+        - 'src/**'
+        - 'pyproject.toml'
+    - base-branch: 'main'
