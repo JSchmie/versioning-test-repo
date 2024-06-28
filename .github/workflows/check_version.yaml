@@ -1,10 +1,13 @@
 name: Check and Add Version in Changelog
 
 on:
-  workflow_run:
-    workflows: [Auto Label PRs]
-    types:
-      - completed
+  pull_request_target: 
+    types: 
+      - labeled
+      - unlabeled
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   check-and-add-version:
