@@ -31,7 +31,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0    
+          fetch-depth: 0 
+      - name: test echo env
+        run: |
+          echo ${{ env.all-labels }} 
+
       - name: Check Version in Changelog for release
         id: check-version-in-changelog
         if: contains(env.all-labels, 'release')
