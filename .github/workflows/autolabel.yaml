@@ -10,7 +10,13 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    steps:   
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Apply Labels
         uses: actions/labeler@v5
         with:
