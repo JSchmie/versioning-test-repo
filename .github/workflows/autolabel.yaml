@@ -71,6 +71,7 @@ jobs:
           echo "Version determined: $clean_version"
 
       - name: Check if Version Already Exists in Tags
+        if: steps.check-version-in-changelog.conclusion != 'skipped'
         run: |
           version="${{ env.version }}"
           if git tag --list | grep -q "^$version$"; then
@@ -82,6 +83,7 @@ jobs:
 
       - name: Check Version in CHANGELOG
         id: check_version
+        if: steps.check-version-in-changelog.conclusion != 'skipped'
         run: |
           version="${{ env.version }}"
           if ! grep -q "^## \[$version\]" CHANGELOG.md; then
