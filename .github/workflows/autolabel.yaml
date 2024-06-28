@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    outputs: 
+      all-labels: ${{ steps.label-the-PR.outputs.all-labels }}
     steps:
       - name: Apply Labels
         id: label-the-PR
@@ -18,11 +20,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
           sync-labels: true
-      - name: Get Applied Labels
-        id: get-labels
-        run: |
-          echo "all-labels=${{ steps.label-the-PR.outputs.all-labels }}" >> $GITHUB_ENV
-          echo ${{ env.all-labels }}
+      # - name: Get Applied Labels
+      #   id: get-labels
+      #   run: |
+      #     echo "all-labels=${{ steps.label-the-PR.outputs.all-labels }}" >> $GITHUB_ENV
+      #     echo ${{ env.all-labels }}
   
   check-changelog:
     needs: label
@@ -34,7 +36,7 @@ jobs:
           fetch-depth: 0 
       - name: test echo env
         run: |
-          echo ${{ env.all-labels }} 
+          echo ${{ needs.label.outputs.all-labels }} }} 
 
       - name: Check Version in Changelog for release
         id: check-version-in-changelog
