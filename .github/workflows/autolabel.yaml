@@ -22,6 +22,7 @@ jobs:
         id: get-labels
         run: |
           echo "all-labels=${{ steps.label-the-PR.outputs.all-labels }}" >> $GITHUB_ENV
+          echo ${{ env.all-labels }}
   
   check-changelog:
     needs: label
