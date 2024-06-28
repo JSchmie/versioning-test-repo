@@ -21,8 +21,11 @@ jobs:
       - name: Get Applied Labels
         id: get-labels
         run: |
-          echo ${{ steps.label-the-PR.outputs.all-labels }}
-  
+          pr_number=${{ github.event.pull_request.number }}
+          labels=$(gh pr view $pr_number --json labels --jq '.labels | map(.name) | join(",")')
+          echo "all_labels=$labels" >> $GITHUB_ENV
+          echo "Applied labels: $labels"
+
     # check-changelog:
     #   needs: label
 
