@@ -19,6 +19,7 @@ jobs:
           sync-labels: true
   
   check-and-add-version:
+    needs: label
     if: >
       contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
