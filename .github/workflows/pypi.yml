@@ -151,5 +151,5 @@ jobs:
           else
             echo "Overall condition for running tests: False"
           fi
-
-          echo (${{github.event_name }} == 'workflow_dispatch' && ${{ github.event.inputs.test }} == 'true') || (${{github.event_name }} == 'workflow_run' && ${{github.event.workflow_run.conclusion }} == 'success') | (${{ github.event_name }} == 'pull_request_target' && ${{ github.event.pull_request.merged }} == 'true')
+          
+          echo "Condition evaluation result: $(( [ '${{ github.event_name }}' == 'workflow_dispatch' && '${{ github.event.inputs.test }}' == 'true' ] || [ '${{ github.event_name }}' == 'workflow_run' && '${{ github.event.workflow_run.conclusion }}' == 'success' ] || [ '${{ github.event_name }}' == 'pull_request' && '${{ github.event.pull_request.merged }}' == 'true' ] ))"
