@@ -151,5 +151,17 @@ jobs:
           else
             echo "Overall condition for running tests: False"
           fi
+
+          CONDITION1=$([[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ]] && echo "true" || echo "false")
+          CONDITION2=$([[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]] && echo "true" || echo "false")
+          CONDITION3=$([[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" ]] && echo "true" || echo "false")
           
-          echo "Condition evaluation result: $(( [ '${{ github.event_name }}' == 'workflow_dispatch' && '${{ github.event.inputs.test }}' == 'true' ] || [ '${{ github.event_name }}' == 'workflow_run' && '${{ github.event.workflow_run.conclusion }}' == 'success' ] || [ '${{ github.event_name }}' == 'pull_request' && '${{ github.event.pull_request.merged }}' == 'true' ] ))"
+          echo "Condition 1 (workflow_dispatch with test=true): $CONDITION1"
+          echo "Condition 2 (workflow_run with success): $CONDITION2"
+          echo "Condition 3 (pull_request merged): $CONDITION3"
+          
+          if [[ "$CONDITION1" == "true" || "$CONDITION2" == "true" || "$CONDITION3" == "true" ]]; then
+            echo "Overall condition for running: True"
+          else
+            echo "Overall condition for running: False"
+          fi
