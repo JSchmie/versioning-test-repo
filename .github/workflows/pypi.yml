@@ -133,7 +133,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
             echo "Condition 2: Workflow run with successful conclusion"
           fi
-          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
             echo "Condition 3: Pull request merged"
           fi
           
