@@ -27,7 +27,8 @@ jobs:
   Build-and-publish-to-Test-PyPI:
     if: >
       (github.event_name == 'workflow_dispatch' && github.event.inputs.test == 'true') ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +59,8 @@ jobs:
   Test-PyPi-install:
     if: >
       (github.event_name == 'workflow_dispatch' && github.event.inputs.test == 'true') ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == 'true')
     name: Test Installation from TestPyPI
     needs: Build-and-publish-to-Test-PyPI
     runs-on: ubuntu-latest
