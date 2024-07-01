@@ -24,6 +24,29 @@ on:
         type: boolean
 
 jobs:
+  debug-conditions-for-Build-and-publish-to-Test-PyPI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Conditions
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Test input: ${{ github.event.inputs.test }}"
+          echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Pull request merged: ${{ github.event.pull_request.merged }}"
+          
+          CONDITION1=$([[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ]] && echo "true" || echo "false")
+          CONDITION2=$([[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]] && echo "true" || echo "false")
+          CONDITION3=$([[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" ]] && echo "true" || echo "false")
+          
+          echo "Condition 1 (workflow_dispatch with test=true): $CONDITION1"
+          echo "Condition 2 (workflow_run with success): $CONDITION2"
+          echo "Condition 3 (pull_request_target merged): $CONDITION3"
+          
+          if [[ "$CONDITION1" == "true" || "$CONDITION2" == "true" || "$CONDITION3" == "true" ]]; then
+            echo "Overall condition for Build-and-publish-to-Test-PyPI: True"
+          else
+            echo "Overall condition for Build-and-publish-to-Test-PyPI: False"
+          fi
   Build-and-publish-to-Test-PyPI:
     if: >
       (github.event_name == 'workflow_dispatch' && github.event.inputs.test == 'true') ||
