@@ -24,6 +24,11 @@ release:
       - 'pyproject.toml'
       - 'LICENCE'
 
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'tests/**'
+      
 workflows:
   - changed-files:
       - any-glob-to-any-file:
