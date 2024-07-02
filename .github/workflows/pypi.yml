@@ -29,7 +29,7 @@ jobs:
     if: |
       (${{ github.event_name }} == 'workflow_dispatch' && ${{ github.event.inputs.test }} == 'true') ||
       (${{ github.event_name }} == 'workflow_run' && ${{ github.event.workflow_run.conclusion }}  == 'success') ||
-      ((${{ github.event_name }} == 'pull_request_target' && ${{ github.event.pull_request.merged }}  == 'true') && ${{ contains(github.event.pull_request.labels.*.name, 'release') }} == 'true')
+      (${{ github.event_name }} == 'pull_request_target' && ${{ github.event.pull_request.merged }}  == 'true' && ${{ contains(github.event.pull_request.labels.*.name, 'release') }} == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,6 +58,7 @@ jobs:
           fi
       - name: Check if Statement
         run: |
+          
           if [[ ( "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ) || 
                 ( "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ) || 
                 ( "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" && "${{ contains(github.event.pull_request.labels.*.name, 'release') }}" == "true" ) ]]; then
@@ -134,6 +135,7 @@ jobs:
           echo "Test input: ${{ github.event.inputs.test }}"
           echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
+          echo "Labels of the Pull Request: ${{ github.event.pull_request.labels.*.name }}"
           
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.publish_to_pypi }}" == "true" ]]; then
             echo "Condition 1: Manual dispatch with publish_to_pypi is true"
