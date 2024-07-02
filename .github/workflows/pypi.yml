@@ -136,7 +136,7 @@ jobs:
           echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Labels of the Pull Request: ${{ github.event.pull_request.labels.*.name }}"
-          echo "Labels realese in PR?: ${{ contains(github.event.pull_request.labels.*.name, 'release') }}
+          echo "Labels realese in PR?: ${{ contains(github.event.pull_request.labels.*.name, 'release') }}"
           
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.publish_to_pypi }}" == "true" ]]; then
             echo "Condition 1: Manual dispatch with publish_to_pypi is true"
