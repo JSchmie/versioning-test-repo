@@ -18,12 +18,11 @@ docker:
 
 # Label for release-related changes
 release:
-  - all:
-    - changed-files:
-      - any-glob-to-any-file:
-        - 'src/**'
-        - 'pyproject.toml'
-        - 'LICENCE'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/**'
+      - 'pyproject.toml'
+      - 'LICENCE'
 
 workflows:
   - changed-files:
