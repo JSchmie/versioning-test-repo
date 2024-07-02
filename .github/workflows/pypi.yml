@@ -126,7 +126,7 @@ jobs:
                 dunamai from git --format "v{base}.dev{distance}+{commit}"
             fi
   echo-conditions:
-    if: github.event.inputs.publish_to_pypi == 'true'
+    if: github.event.inputs.test_conditions_of_ci == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Echo Logic Conditions
