@@ -2,8 +2,8 @@
   labelsSynonyms: {
     bug: ['error', 'need fix', 'not working'],
     enhancement: ['upgrade'],
-    question: ['help', 'how can i']
-    documentation: ['docs', 'Readme']
+    question: ['help', 'how can i'],
+    documentation: ['docs', 'Readme'],
     docker: ['compose', 'Dockerfile']
   },
   labelsNotAllowed: [
