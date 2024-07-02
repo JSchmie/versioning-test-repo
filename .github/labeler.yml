@@ -24,7 +24,6 @@ release:
         - 'src/**'
         - 'pyproject.toml'
         - 'LICENCE'
-    - base-branch: 'main'
 
 workflows:
   - changed-files:
