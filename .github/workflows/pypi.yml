@@ -155,7 +155,7 @@ jobs:
           CONDITION1=$([[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ]] && echo "true" || echo "false")
           CONDITION2=$([[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]] && echo "true" || echo "false")
           CONDITION3=$([[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" ]] && echo "true" || echo "false")
-          CONDITION4= $([[ "${{ contains(github.event.pull_request.labels.*.name, 'release') }}" && echo "true" || echo "false")
+          CONDITION4= $([[ "${{ contains(github.event.pull_request.labels.*.name, 'release') }}" == "true" && echo "true" || echo "false")
           
           echo "Condition 1 (workflow_dispatch with test=true): $CONDITION1"
           echo "Condition 2 (workflow_run with success): $CONDITION2"
