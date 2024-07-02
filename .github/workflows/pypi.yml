@@ -84,14 +84,14 @@ jobs:
       needs: Test-PyPi-install
       if: |
           ${{always() }} &&
-          (needs.Build-and-publish-to-Test-PyPI.result  != 'failure' && needs.Test-PyPi-install.result != 'failure' ) &&
+          ((needs.Build-and-publish-to-Test-PyPI.result  != 'failure' && needs.Test-PyPi-install.result != 'failure' ) &&
           (github.event_name == 'workflow_dispatch' &&
           github.event.inputs.test == 'true') ||
           (github.event_name == 'workflow_run' &&
           github.event.workflow_run.conclusion  == 'success') ||
           (github.event_name == 'pull_request_target' &&
           github.event.pull_request.merged &&
-          contains(github.event.pull_request.labels.*.name, 'release'))
+          contains(github.event.pull_request.labels.*.name, 'release')))
       steps:
         - name: Checkout Repository Tags
           uses: actions/checkout@v4
