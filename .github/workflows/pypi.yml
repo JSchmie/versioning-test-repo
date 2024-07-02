@@ -58,7 +58,7 @@ jobs:
           fi
       - name: Check if Statement
         run: 
-          echo "(${{ github.event_name }} == 'workflow_dispatch' && ${{ github.event.inputs.test }} == 'true') || (${{ github.event_name }} == 'workflow_run' && ${{ github.event.workflow_run.conclusion }}  == 'success') || (${{ github.event_name }} == 'pull_request_target' && ${{ github.event.pull_request.merged }}  == 'true' && ${{ contains(github.event.pull_request.labels.*.name, 'release') }})
+          echo "([[(${{ github.event_name }} == 'workflow_dispatch' && ${{ github.event.inputs.test }} == 'true') || (${{ github.event_name }} == 'workflow_run' && ${{ github.event.workflow_run.conclusion }}  == 'success') || (${{ github.event_name }} == 'pull_request_target' && ${{ github.event.pull_request.merged }}  == 'true' && ${{ contains(github.event.pull_request.labels.*.name, 'release') }})]]  && echo "true" || echo "false")
 
   Test-PyPi-install:
     if: |
