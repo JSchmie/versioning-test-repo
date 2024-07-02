@@ -1,16 +1,16 @@
-name: "Set Issue Label and Assignee"
+name: Labeling new issue
 on:
   issues:
-    types: [opened]
-  pull_request:
-    types: [opened]
-
+    types: ['opened']
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: Naturalclar/issue-action@v2.0.2
+      - uses: actions/checkout@v4
         with:
-          title-or-body: "both"
-          parameters: [ {"keywords": ["bug", "error"], "labels": ["BUG"], "assignees": ["username"]}, {"keywords": ["help", "guidance"], "labels": ["help-wanted"], "assignees": ["username"]}]
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          sparse-checkout: |
+            .github/workflows/auto-label.json5
+          sparse-checkout-cone-mode: false
+      - uses: Renato66/auto-label@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
