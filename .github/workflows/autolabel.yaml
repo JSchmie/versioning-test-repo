@@ -106,8 +106,8 @@ jobs:
         with:
           fetch-depth: 0 
 
-      - name: Fetch Tags
-        run: git fetch --tags
+      # - name: Fetch Tags
+      #   run: git fetch --tags
 
       - name: Get Latest Tag
         id: get-latest-tag
