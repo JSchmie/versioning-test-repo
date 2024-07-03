@@ -87,6 +87,11 @@ jobs:
               next_minor_version="v$major.$((minor + 1)).0"
               new_version="$next_patch_version"
               echo "::warning::The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version."
+              
+              # Raise an error if update_changelog is false
+              if [ "$update_changelog" = "false" ]; then
+                echo "::error::The determined new version ($clean_version) requires updating the changelog. Please set update_changelog to true."
+                exit 1
             else
               new_version="$changelog_version"
             fi
