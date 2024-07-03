@@ -40,16 +40,15 @@ jobs:
             python -m pip install --upgrade pip
             pip install dunamai
         
-        - name: Use Dunamai
+        - name: Use Dunamai to get Version Tag
           run: |
             # Example command using dunamai
             distance=$(dunamai from git --format "{distance}")
             branch=$(dunamai from git --format "{branch}")
+            
             # Main logic
             if [ "$distance" = "0" ]; then
-                dunamai from git --format "v{base}"
+                dunamai from git --format "{base}"
             elif [ "$branch" = "develop" ]; then
-                dunamai from git --format "v{base}.dev{distance}"
-            else
-                dunamai from git --format "v{base}.dev{distance}+{commit}"
+                dunamai from git --format "{base}.dev{distance}"
             fi
