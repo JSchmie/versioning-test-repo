@@ -104,7 +104,7 @@ jobs:
           version="${{ steps.determine-new-version.outputs.version }}"
           clean_version="${version#v}"
           pr_title="${{ inputs.pr_title }}"
-
+          echo "Version: $version"
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
             echo "Error: clean_version is empty"
