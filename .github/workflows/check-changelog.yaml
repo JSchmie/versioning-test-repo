@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Get Latest Tag
         id: get-latest-tag
@@ -33,7 +33,6 @@ jobs:
 
       - name: Determine New Version from CHANGELOG
         id: determine-new-version
-        continue-on-error: true
         run: |
           latest_tag=${{ env.latest_tag }}
           pr_title="${{ inputs.pr_title }}"
@@ -94,7 +93,7 @@ jobs:
       - name: Extract Release Notes
         id: extract-notes
         run: |
-          version="${{ steps.determine-new-version.outputs.version }}"
+          version="${{ steps.determine-new-version.outputs.next_version }}"
           clean_version="${version#v}"
           release_notes=$(awk -v version="$clean_version" '
             BEGIN { flag=0 }
@@ -129,7 +128,7 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "1i ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title\n" CHANGELOG.md
+            sed -i "1i ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title" CHANGELOG.md
           else
             sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title" CHANGELOG.md
           fi
@@ -139,10 +138,16 @@ jobs:
           echo "$updated_changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=updated_changelog::$updated_changelog"
-  
+
       - name: Echo Updated CHANGELOG.md
         if: ${{ inputs.update_changelog }}
         run: |
           echo "Updated CHANGELOG.md:"
           echo "${{ steps.update-changelog.outputs.updated_changelog }}"
 
+      - name: Upload CHANGELOG.md as Artifact
+        if: ${{ inputs.update_changelog }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: updated-changelog
+          path: CHANGELOG.md
