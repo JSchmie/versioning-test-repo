@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  Build-and-publish-to-Test-PyPI:
+  Build-and-publish-to-Dockerhub:
     if: |
         github.event_name == 'workflow_dispatch' ||
         (github.event_name == 'workflow_run' &&
@@ -25,12 +25,31 @@ jobs:
         contains(github.event.pull_request.labels.*.name, 'docker'))
     runs-on: ubuntu-latest
     steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+          with:
+                fetch-depth: '0'
+        
+        - name: Set up Python and install Dunamai
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.x'  # You can specify a specific version if needed
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-      - name: Get latest release tag
-        id: get_tag
-        run: echo "RELEASE_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)"
-  
+        - name: Install Dunamai
+          run: |
+            python -m pip install --upgrade pip
+            pip install dunamai
+        
+        - name: Use Dunamai
+          run: |
+            # Example command using dunamai
+            distance=$(dunamai from git --format "{distance}")
+            branch=$(dunamai from git --format "{branch}")
+            # Main logic
+            if [ "$distance" = "0" ]; then
+                dunamai from git --format "v{base}"
+            elif [ "$branch" = "develop" ]; then
+                dunamai from git --format "v{base}.dev{distance}"
+            else
+                dunamai from git --format "v{base}.dev{distance}+{commit}"
+            fi
