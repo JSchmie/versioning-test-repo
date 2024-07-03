@@ -15,7 +15,7 @@ jobs:
   check-changelog:
     runs-on: ubuntu-latest
     outputs:
-      next_version: ${{ steps.determine-new-version.outputs.version }}
+      next_version: ${{ steps.determine-new-version.outputs.next_version }}
       release_notes: ${{ steps.extract-notes.outputs.release_notes }}
       updated_changelog: ${{ steps.update-changelog.outputs.updated_changelog }}
     steps:
@@ -36,47 +36,60 @@ jobs:
         continue-on-error: true
         run: |
           latest_tag=${{ env.latest_tag }}
+          pr_title="${{ inputs.pr_title }}"
 
-          # Extract the latest version from CHANGELOG.md
-          changelog_version=$(grep -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n 1)
+          # Extract version from PR title if present
+          version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
+          if [[ $pr_title =~ $version_regex ]]; then
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+            new_version="v$major.$minor.$patch"
+            echo "Found semantic version in PR title: $new_version"
+          else
+            # Extract the latest version from CHANGELOG.md
+            changelog_version=$(grep -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n 1)
 
-          if [ -z "$changelog_version" ]; then
-            echo "No version found in CHANGELOG.md. Bumping patch version of the latest tag."
+            if [ -z "$changelog_version" ]; then
+              echo "No version found in CHANGELOG.md. Bumping patch version of the latest tag."
 
-            # Split the latest tag into parts
-            IFS='.' read -r -a parts <<< "${latest_tag#v}"
-            major=${parts[0]}
-            minor=${parts[1]}
-            patch=${parts[2]}
-            patch=$((patch + 1))
-            changelog_version="v$major.$minor.$patch-pre"
+              # Split the latest tag into parts
+              IFS='.' read -r -a parts <<< "${latest_tag#v}"
+              major=${parts[0]}
+              minor=${parts[1]}
+              patch=${parts[2]}
+              patch=$((patch + 1))
+              changelog_version="v$major.$minor.$patch-pre"
+            fi
+
+            # Convert versions to comparable formats by removing "v" and padding numbers
+            pad_version() {
+              printf "%03d%03d%03d" $(echo "$1" | tr '.' ' ')
+            }
+
+            padded_changelog_version=$(pad_version "$changelog_version")
+            padded_latest_tag=$(pad_version "${latest_tag#v}")
+
+            # Ensure changelog_version is greater than latest_tag
+            if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
+              # Split the latest tag into parts again for suggestion
+              IFS='.' read -r -a parts <<< "${latest_tag#v}"
+              major=${parts[0]}
+              minor=${parts[1]}
+              patch=${parts[2]}
+              next_patch_version="v$major.$minor.$((patch + 1))"
+              next_minor_version="v$major.$((minor + 1)).0"
+              new_version="$next_patch_version-pre"
+              echo "The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version."
+            else
+              new_version="$changelog_version-pre"
+            fi
           fi
 
-          # Convert versions to comparable formats by removing "v" and padding numbers
-          pad_version() {
-            printf "%03d%03d%03d" $(echo "$1" | tr '.' ' ')
-          }
-
-          padded_changelog_version=$(pad_version "$changelog_version")
-          padded_latest_tag=$(pad_version "${latest_tag#v}")
-
-          # Ensure changelog_version is greater than latest_tag
-          if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
-            # Split the latest tag into parts again for suggestion
-            IFS='.' read -r -a parts <<< "${latest_tag#v}"
-            major=${parts[0]}
-            minor=${parts[1]}
-            patch=${parts[2]}
-            next_patch_version="v$major.$minor.$((patch + 1))"
-            next_minor_version="v$major.$((minor + 1)).0"
-            echo "The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version. Please create a new release in your CHANGELOG.md."
-            exit 1
-          fi
-
-          clean_version="${changelog_version#v}"
-          echo "version=$clean_version" >> $GITHUB_ENV
-          echo "::set-output name=version::$clean_version"
-          echo "Version determined from CHANGELOG.md or bumped: $clean_version"
+          clean_version="${new_version#v}"
+          echo "next_version=$clean_version" >> $GITHUB_ENV
+          echo "::set-output name=next_version::$clean_version"
+          echo "Version determined: $clean_version"
 
       - name: Extract Release Notes
         id: extract-notes
@@ -101,11 +114,13 @@ jobs:
         if: ${{ inputs.update_changelog }}
         id: update-changelog
         run: |
-          version="${{ steps.determine-new-version.outputs.version }}"
-          clean_version="${version#v}"
+          next_version="${{ steps.determine-new-version.outputs.next_version }}"
+          clean_version="${next_version#v}"
           pr_title="${{ inputs.pr_title }}"
-          echo "Version: ${version}"
-          echo "${{ steps.determine-new-version.outputs.version }}"
+
+          echo "Next Version: ${next_version}"
+          echo "Clean Version: ${clean_version}"
+
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
             echo "Error: clean_version is empty"
@@ -130,3 +145,4 @@ jobs:
         run: |
           echo "Updated CHANGELOG.md:"
           echo "${{ steps.update-changelog.outputs.updated_changelog }}"
+
