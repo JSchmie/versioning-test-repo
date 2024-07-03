@@ -118,12 +118,18 @@ jobs:
             echo "Error: clean_version is empty"
             exit 1
           fi
+          
+          # Construct the PR link if pr_number and pr_url are set
+          pr_link=""
+          if [ -n "$pr_number" ] && [ -n "$pr_url" ]; then
+            pr_link="[#$pr_number]($pr_url)"
+          fi
 
           # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title [#${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
+            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title $pr_link" CHANGELOG.md
           else
-            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title [#${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
+            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title $pr_link" CHANGELOG.md
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
