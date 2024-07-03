@@ -92,6 +92,7 @@ jobs:
               if [ "${{ inputs.update_changelog }}" = "false" ]; then
                 echo "::error::The determined new version ($clean_version) requires updating the changelog. Please set update_changelog to true."
                 exit 1
+              fi
             else
               new_version="$changelog_version"
             fi
