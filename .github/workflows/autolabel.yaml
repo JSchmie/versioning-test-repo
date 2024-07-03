@@ -26,4 +26,7 @@ jobs:
     if: |
       contains(needs.label.outputs.all-labels, 'release') ||
       contains(needs.label.outputs.all-labels, 'docker')
-    uses: ./.github/workflows/check-changelog.yml
+    uses: ./.github/workflows/check-changelog.yaml
+    with:
+      pr_title: ${{ github.event.pull_request.title }}
+      update_changelog: true
