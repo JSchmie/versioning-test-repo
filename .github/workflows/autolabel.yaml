@@ -125,8 +125,17 @@ jobs:
           changelog_version=$(grep -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n 1)
 
           if [ -z "$changelog_version" ]; then
-            echo "No version found in CHANGELOG.md."
-            exit 1
+            echo "No version found in CHANGELOG.md. Bumping patch version of the latest tag."
+
+            # Split the latest tag into parts
+            IFS='.' read -r -a parts <<< "${latest_tag#v}"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
+
+            changelog_version="$new_tag"
           fi
 
           # Convert versions to comparable formats by removing "v" and padding numbers
