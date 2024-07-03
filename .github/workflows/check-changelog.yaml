@@ -96,25 +96,6 @@ jobs:
           echo "::set-output name=next_version::$clean_version"
           echo "Version determined: $clean_version"
 
-      - name: Extract Release Notes
-        id: extract-notes
-        run: |
-          version="${{ steps.determine-new-version.outputs.next_version }}"
-          clean_version="${version#v}"
-          release_notes=$(awk -v version="$clean_version" '
-            BEGIN { flag=0 }
-            # Start flagging when the version section is found
-            /^## \[.*\]/ {
-              if (flag) exit  # Exit when the next section starts
-            }
-            /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
-            flag { print }  # Print lines while flag is 1
-          ' CHANGELOG.md)
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$release_notes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "::set-output name=release_notes::$release_notes"
-
       - name: Update CHANGELOG.md
         if: ${{ inputs.update_changelog }}
         id: update-changelog
@@ -134,9 +115,9 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title [${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
+            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title [#${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
           else
-            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title [${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
+            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title [#${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
@@ -157,3 +138,22 @@ jobs:
         with:
           name: updated-changelog
           path: CHANGELOG.md
+      
+      - name: Extract Release Notes
+        id: extract-notes
+        run: |
+            version="${{ steps.determine-new-version.outputs.next_version }}"
+            clean_version="${version#v}"
+            release_notes=$(awk -v version="$clean_version" '
+              BEGIN { flag=0 }
+              # Start flagging when the version section is found
+              /^## \[.*\]/ {
+                if (flag) exit  # Exit when the next section starts
+              }
+              /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
+              flag { print }  # Print lines while flag is 1
+            ' CHANGELOG.md)
+            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+            echo "$release_notes" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            echo "::set-output name=release_notes::$release_notes"
