@@ -1,5 +1,6 @@
 # Changelog
-
+## [3.0.0] - 2024-07-03
+ - Some Changes
 ## [0.2.7] - 2024-06-27
 - Fixed PyPI Upload yaml.
     - Now tiggers the test and PyPI upload seperatly when using workflow dispatch. 
