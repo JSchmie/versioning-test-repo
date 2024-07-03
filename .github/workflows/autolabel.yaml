@@ -118,6 +118,7 @@ jobs:
 
       - name: Determine New Version from CHANGELOG
         id: determine-new-version
+        continue-on-error: true
         run: |
           latest_tag=${{ env.latest_tag }}
 
