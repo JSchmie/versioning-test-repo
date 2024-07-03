@@ -3,6 +3,10 @@ name: Check Changelog
 on:
   workflow_call:
     inputs:
+      update_changelog:
+        required: false
+        type: boolean
+        default: false
       pr_title:
         required: false
         type: string
@@ -12,10 +16,7 @@ on:
       pr_url:
         required: false
         type: string
-      update_changelog:
-        required: false
-        type: boolean
-        default: false
+      
 
 jobs:
   check-changelog:
