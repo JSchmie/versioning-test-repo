@@ -128,7 +128,7 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "/^# Changelog/a ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title" CHANGELOG.md
+            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title" CHANGELOG.md
           else
             sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title" CHANGELOG.md
           fi
