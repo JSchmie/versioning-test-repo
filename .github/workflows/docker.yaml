@@ -17,7 +17,7 @@ on:
 jobs:
   Build-and-publish-to-Test-PyPI:
     if: |
-        github.event_name == 'workflow_dispatch' &&
+        github.event_name == 'workflow_dispatch' ||
         (github.event_name == 'workflow_run' &&
         github.event.workflow_run.conclusion  == 'success') ||
         (github.event_name == 'pull_request_target' &&
@@ -32,5 +32,5 @@ jobs:
           fetch-depth: '0'
       - name: Get latest release tag
         id: get_tag
-        run: echo "RELEASE_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+        run: echo "RELEASE_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)"
   
