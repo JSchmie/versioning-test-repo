@@ -26,4 +26,4 @@ jobs:
     if: |
       contains(needs.label.outputs.all-labels, 'release') ||
       contains(needs.label.outputs.all-labels, 'docker')
-    uses: ./.github/workflows/reusable-check-changelog.yml
+    uses: ./.github/workflows/check-changelog.yml
