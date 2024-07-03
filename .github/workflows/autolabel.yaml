@@ -2,7 +2,7 @@ name: Auto Label PRs
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   label:
@@ -43,6 +43,10 @@ jobs:
           # Extract version from PR title or body
           pr_body="${{ github.event.pull_request.body }}"
           pr_title="${{ github.event.pull_request.title }}"
+
+          echo "pr_body= $pr_body"
+          echo "pr_title= $pr_title"
+          
           version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
 
           if [[ $pr_body =~ $version_regex ]]; then
