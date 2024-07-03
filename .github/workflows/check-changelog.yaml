@@ -59,7 +59,7 @@ jobs:
               minor=${parts[1]}
               patch=${parts[2]}
               patch=$((patch + 1))
-              changelog_version="v$major.$minor.$patch-pre"
+              changelog_version="v$major.$minor.$patch"
             fi
 
             # Convert versions to comparable formats by removing "v" and padding numbers
@@ -79,10 +79,10 @@ jobs:
               patch=${parts[2]}
               next_patch_version="v$major.$minor.$((patch + 1))"
               next_minor_version="v$major.$((minor + 1)).0"
-              new_version="$next_patch_version-pre"
+              new_version="$next_patch_version"
               echo "The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version."
             else
-              new_version="$changelog_version-pre"
+              new_version="$changelog_version"
             fi
           fi
 
