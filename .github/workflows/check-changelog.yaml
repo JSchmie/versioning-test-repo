@@ -105,10 +105,17 @@ jobs:
           clean_version="${version#v}"
           pr_title="${{ inputs.pr_title }}"
 
+          # Ensure clean_version is not empty
+          if [ -z "$clean_version" ]; then
+            echo "Error: clean_version is empty"
+            exit 1
+          fi
+
+          # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
             sed -i "1i ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title\n" CHANGELOG.md
           else
-            sed -i "/^## \[$clean_version.pre\]/a - $pr_title" CHANGELOG.md
+            sed -i "/^## \[$clean_version.pre\]/a \- $pr_title" CHANGELOG.md
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
