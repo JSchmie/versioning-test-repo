@@ -146,7 +146,9 @@ jobs:
 
           # Ensure changelog_version is greater than latest_tag
           if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
-            echo "The version in CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag)."
+            next_patch_version="${latest_tag%.*}.$((patch + 1))"
+            next_minor_version="${latest_tag%%.*}.$((minor + 1)).0"
+            echo "The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version. Please create a new release in your CHANGELOG.md."
             exit 1
           fi
 
@@ -176,4 +178,3 @@ jobs:
           else
             echo "Version $version found in CHANGELOG.md."
           fi
-
