@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       pr_title:
-        required: true
+        required: false
         type: string
       pr_number:
         required: false
