@@ -2,6 +2,14 @@ name: Check Changelog
 
 on:
   workflow_call:
+    inputs:
+      pr_title:
+        required: true
+        type: string
+      update_changelog:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   check-changelog:
@@ -9,6 +17,7 @@ jobs:
     outputs:
       next_version: ${{ steps.determine-new-version.outputs.version }}
       release_notes: ${{ steps.extract-notes.outputs.release_notes }}
+      updated_changelog: ${{ steps.update-changelog.outputs.updated_changelog }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -40,7 +49,7 @@ jobs:
             minor=${parts[1]}
             patch=${parts[2]}
             patch=$((patch + 1))
-            changelog_version="v$major.$minor.$patch"
+            changelog_version="v$major.$minor.$patch-pre"
           fi
 
           # Convert versions to comparable formats by removing "v" and padding numbers
@@ -66,7 +75,7 @@ jobs:
 
           clean_version="${changelog_version#v}"
           echo "version=$clean_version" >> $GITHUB_ENV
-          echo "::set-output name=next_version::$clean_version"
+          echo "::set-output name=version::$clean_version"
           echo "Version determined from CHANGELOG.md or bumped: $clean_version"
 
       - name: Extract Release Notes
@@ -88,3 +97,22 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
 
+      - name: Update CHANGELOG.md
+        if: ${{ inputs.update_changelog }}
+        id: update-changelog
+        run: |
+          version="${{ steps.determine-new-version.outputs.version }}"
+          clean_version="${version#v}"
+          pr_title="${{ inputs.pr_title }}"
+
+          if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+            echo "## [$clean_version.pre] - $(date +%Y-%m-%d)" >> CHANGELOG.md
+          fi
+
+          sed -i "/^## \[$clean_version.pre\]/a - $pr_title" CHANGELOG.md
+
+          updated_changelog=$(cat CHANGELOG.md)
+          echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$updated_changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "::set-output name=updated_changelog::$updated_changelog"
