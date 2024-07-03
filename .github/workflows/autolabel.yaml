@@ -146,8 +146,13 @@ jobs:
 
           # Ensure changelog_version is greater than latest_tag
           if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
-            next_patch_version="${latest_tag%.*}.$((patch + 1))"
-            next_minor_version="${latest_tag%%.*}.$((minor + 1)).0"
+            # Split the latest tag into parts again for suggestion
+            IFS='.' read -r -a parts <<< "${latest_tag#v}"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            next_patch_version="v$major.$minor.$((patch + 1))"
+            next_minor_version="v$major.$((minor + 1)).0"
             echo "The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version. Please create a new release in your CHANGELOG.md."
             exit 1
           fi
