@@ -7,10 +7,10 @@ on:
         required: true
         type: string
       pr_number:
-        required: true
+        required: false
         type: string
       pr_url:
-          required: true
+        required: false
         type: string
       update_changelog:
         required: false
