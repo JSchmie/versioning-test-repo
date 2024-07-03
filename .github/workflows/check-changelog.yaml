@@ -106,13 +106,19 @@ jobs:
           pr_title="${{ inputs.pr_title }}"
 
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            echo "## [$clean_version.pre] - $(date +%Y-%m-%d)" >> CHANGELOG.md
+            sed -i "1i ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title\n" CHANGELOG.md
+          else
+            sed -i "/^## \[$clean_version.pre\]/a - $pr_title" CHANGELOG.md
           fi
-
-          sed -i "/^## \[$clean_version.pre\]/a - $pr_title" CHANGELOG.md
 
           updated_changelog=$(cat CHANGELOG.md)
           echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$updated_changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=updated_changelog::$updated_changelog"
+
+      - name: Echo Updated CHANGELOG.md
+        if: ${{ inputs.update_changelog }}
+        run: |
+          echo "Updated CHANGELOG.md:"
+          echo "${{ steps.update-changelog.outputs.updated_changelog }}"
