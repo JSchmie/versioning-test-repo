@@ -95,6 +95,7 @@ jobs:
           else
             echo "Version $version found in CHANGELOG.md."
           fi
+  
   check-changelog:
     needs: label
     if: contains(needs.label.outputs.all-labels, 'release')
@@ -105,11 +106,12 @@ jobs:
         with:
           fetch-depth: 0 
 
+      - name: Fetch Tags
+        run: git fetch --tags
+
       - name: Get Latest Tag
         id: get-latest-tag
         run: |
-          git fetch --tags
-          
           # Get the latest tag, or initialize to v0.0.0 if no tags are found
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
@@ -127,8 +129,16 @@ jobs:
             exit 1
           fi
 
+          # Convert versions to comparable formats by removing "v" and padding numbers
+          pad_version() {
+            printf "%03d%03d%03d" $(echo "$1" | tr '.' ' ')
+          }
+
+          padded_changelog_version=$(pad_version "$changelog_version")
+          padded_latest_tag=$(pad_version "${latest_tag#v}")
+
           # Ensure changelog_version is greater than latest_tag
-          if [ "$(printf '%s\n' "$changelog_version" "$latest_tag" | sort -V | head -n1)" = "$changelog_version" ] && [ "$changelog_version" != "$latest_tag" ]; then
+          if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
             echo "The version in CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag)."
             exit 1
           fi
@@ -159,4 +169,3 @@ jobs:
           else
             echo "Version $version found in CHANGELOG.md."
           fi
-            
