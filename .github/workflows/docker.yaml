@@ -1,0 +1,35 @@
+name: Test Docker Workflow
+
+on:
+  workflow_run:
+    workflows: [Semantic Versioning for Tags]
+    types:
+      - completed
+
+  pull_request_target:
+    branches:
+      - develop
+    types:
+      - closed
+
+  workflow_dispatch:
+    
+jobs:
+  Build-and-publish-to-Test-PyPI:
+    if: |
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion  == 'success') ||
+      (github.event_name == 'pull_request_target' &&
+       github.event.pull_request.merged &&
+       contains(github.event.pull_request.labels.*.name, 'docker'))
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Get latest release tag
+        id: get_tag
+        run: echo "RELEASE_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+  
