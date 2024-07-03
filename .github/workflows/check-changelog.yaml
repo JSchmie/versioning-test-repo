@@ -110,7 +110,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
 
-      - name: Update CHANGELOG.md
+            - name: Update CHANGELOG.md
         if: ${{ inputs.update_changelog }}
         id: update-changelog
         run: |
@@ -131,7 +131,7 @@ jobs:
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
             sed -i "1i ## [$clean_version.pre] - $(date +%Y-%m-%d)\n- $pr_title\n" CHANGELOG.md
           else
-            sed -i "/^## \[$clean_version.pre\]/a \- $pr_title" CHANGELOG.md
+            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title" CHANGELOG.md
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
@@ -145,4 +145,5 @@ jobs:
         run: |
           echo "Updated CHANGELOG.md:"
           echo "${{ steps.update-changelog.outputs.updated_changelog }}"
+
 
