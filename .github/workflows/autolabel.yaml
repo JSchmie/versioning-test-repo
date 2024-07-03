@@ -133,9 +133,7 @@ jobs:
             minor=${parts[1]}
             patch=${parts[2]}
             patch=$((patch + 1))
-            new_tag="v$major.$minor.$patch"
-
-            changelog_version="$new_tag"
+            changelog_version="v$major.$minor.$patch"
           fi
 
           # Convert versions to comparable formats by removing "v" and padding numbers
@@ -154,7 +152,7 @@ jobs:
 
           clean_version="${changelog_version#v}"
           echo "version=$clean_version" >> $GITHUB_ENV
-          echo "Version determined from CHANGELOG.md: $clean_version"
+          echo "Version determined from CHANGELOG.md or bumped: $clean_version"
 
       - name: Check if Version Already Exists in Tags
         if: steps.determine-new-version.conclusion != 'skipped'
@@ -178,3 +176,4 @@ jobs:
           else
             echo "Version $version found in CHANGELOG.md."
           fi
+
