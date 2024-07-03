@@ -6,6 +6,12 @@ on:
       pr_title:
         required: true
         type: string
+      pr_number:
+        required: true
+        type: string
+      pr_url:
+          required: true
+        type: string
       update_changelog:
         required: false
         type: boolean
@@ -128,9 +134,9 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title" CHANGELOG.md
+            sed -i "/^# Changelog/a\\ ## [$clean_version.pre] - $(date +%Y-%m-%d)\n\\- $pr_title [${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
           else
-            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title" CHANGELOG.md
+            sed -i "/^## \[$clean_version.pre\]/a\\- $pr_title [${{inputs.pr_number}}](${{inputs.pr_url}})" CHANGELOG.md
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
