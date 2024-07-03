@@ -23,6 +23,7 @@ jobs:
   
   check-changelog:
     needs: label
+    if: contains(needs.label.outputs.all-labels, 'release')
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout Repository
@@ -32,7 +33,6 @@ jobs:
           
       - name: Check Version in Changelog for release
         id: check-version-in-changelog
-        if: contains(needs.label.outputs.all-labels, 'release')
         run: |
           # Fetch the latest tags from the remote
           git fetch --tags
