@@ -139,11 +139,10 @@ jobs:
           echo "$updated_changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=updated_changelog::$updated_changelog"
-
+  
       - name: Echo Updated CHANGELOG.md
         if: ${{ inputs.update_changelog }}
         run: |
           echo "Updated CHANGELOG.md:"
           echo "${{ steps.update-changelog.outputs.updated_changelog }}"
-
 
