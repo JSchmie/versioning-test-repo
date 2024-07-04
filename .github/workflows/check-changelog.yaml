@@ -160,7 +160,7 @@ jobs:
             git add CHANGELOG.md
             pr_number=${{ github.event.pull_request.number }}
             pr_title="${{ github.event.pull_request.title }}"
-            git commit -m "Update changelog with PR \#$pr_number: $pr_title"
+            git commit -m "Update changelog with PR #$pr_number: $pr_title"
             
             # Configure GitHub token authentication
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
