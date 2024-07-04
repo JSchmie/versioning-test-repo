@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.4.pre] - 2024-07-04
+
+- New tag system for v0.3.4 
+
 ## [0.2.8.pre] - 2024-07-04
 
 -  
