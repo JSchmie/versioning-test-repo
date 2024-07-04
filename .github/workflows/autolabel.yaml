@@ -28,7 +28,4 @@ jobs:
       contains(needs.label.outputs.all-labels, 'docker')
     uses: ./.github/workflows/check-changelog.yaml
     with:
-      pr_title: ${{ github.event.pull_request.title }}
-    #   pr_number: ${{ github.event.pull_request.number }}
-    #   pr_url: ${{ github.event.pull_request.html_url }}
       update_changelog: true
