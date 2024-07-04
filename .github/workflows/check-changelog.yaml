@@ -130,10 +130,16 @@ jobs:
           fi
 
           # Add a new version header with the .pre suffix if it doesn't exist
-          if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+          # Check if the PR title is already in the changelog
+          if grep -q "$pr_title" CHANGELOG.md; then
+            echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
-            sed -i "/^## \[$clean_version.pre\]/a\n- $pr_title $pr_link" CHANGELOG.md
+            # Add a new version header with the .pre suffix if it doesn't exist
+            if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+              sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+            else
+              sed -i "/^## \[$clean_version.pre\]/a\n- $pr_title $pr_link" CHANGELOG.md
+            fi
           fi
 
           updated_changelog=$(cat CHANGELOG.md)
