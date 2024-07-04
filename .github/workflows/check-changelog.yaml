@@ -209,6 +209,7 @@ jobs:
   
   collect-outputs:
     runs-on: ubuntu-latest
+    if: always()
     needs: [extract-release-notes, check-changelog, update-changelog]
     outputs:
       current_version: ${{ needs.check-changelog.outputs.latest_tag }}
