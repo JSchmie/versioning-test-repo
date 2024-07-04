@@ -112,7 +112,7 @@ jobs:
           next_version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${next_version#v}"
           pr_title="${{ github.event.pull_request.title }}"
-
+          pr_url="${{ github.event.pull_request.html_url }}"
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
 
