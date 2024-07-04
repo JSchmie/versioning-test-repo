@@ -7,15 +7,6 @@ on:
         required: false
         type: boolean
         default: false
-      pr_title:
-        required: false
-        type: string
-      pr_number:
-        required: false
-        type: string
-      pr_url:
-        required: false
-        type: string
       
 
 jobs:
@@ -102,12 +93,23 @@ jobs:
           echo "next_version=$clean_version" >> $GITHUB_ENV
           echo "::set-output name=next_version::$clean_version"
           echo "Version determined: $clean_version"
+  
+  update-changelog:
+    needs: check-changelog
+    runs-on: ubuntu-latest
+    if:  ${{ inputs.update_changelog }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
 
       - name: Update CHANGELOG.md
-        if: ${{ inputs.update_changelog }}
         id: update-changelog
         run: |
-          next_version="${{ steps.determine-new-version.outputs.next_version }}"
+          next_version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${next_version#v}"
           pr_title="${{ inputs.pr_title }}"
 
@@ -139,23 +141,19 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=updated_changelog::$updated_changelog"
 
-      - name: Echo Updated CHANGELOG.md
-        if: ${{ inputs.update_changelog }}
-        run: |
-          echo "Updated CHANGELOG.md:"
-          echo "${{ steps.update-changelog.outputs.updated_changelog }}"
-
-      - name: Upload CHANGELOG.md as Artifact
-        if: ${{ inputs.update_changelog }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: updated-changelog
-          path: CHANGELOG.md
+      - name: Commit and Push Changes
+        run: 
+          git add CHANGELOG.md
+          git commit -m "Update changelog with PR #${{ github.event.pull_request.number }}: ${{ steps.extract-pr-title.outputs.pr_title }}"
+          # Configure GitHub token authentication
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+          # Push the changes to the remote repository
+          git push origin ${{ github.event.pull_request.head.ref }}
       
       - name: Extract Release Notes
         id: extract-notes
         run: |
-            version="${{ steps.determine-new-version.outputs.next_version }}"
+            version="${{ needs.check-changelog.outputs.next_version }}"
             clean_version="${version#v}"
             release_notes=$(awk -v version="$clean_version" '
               BEGIN { flag=0 }
