@@ -1,7 +1,6 @@
 # Changelog
 
 ## [0.3.4.pre] - 2024-07-04
-n- New tag system for v0.3.4 [#140](https://github.com/JSchmie/versioning-test-repo/pull/140)
 
 ## [0.2.7] - 2024-06-27
 - Fixed PyPI Upload yaml.

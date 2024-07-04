@@ -138,7 +138,7 @@ jobs:
             if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
               sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
             else
-              sed -i "/^## \[$clean_version.pre\]/a\n- $pr_title $pr_link" CHANGELOG.md
+              sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
             fi
           fi
 
