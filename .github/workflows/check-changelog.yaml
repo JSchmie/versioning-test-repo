@@ -33,7 +33,7 @@ jobs:
         id: determine-new-version
         run: |
           latest_tag=${{ env.latest_tag }}
-          pr_title="${{ inputs.pr_title }}"
+          pr_title="${{ github.event.pull_request.title }}"
 
           # Extract version from PR title if present
           version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
@@ -111,7 +111,7 @@ jobs:
         run: |
           next_version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${next_version#v}"
-          pr_title="${{ inputs.pr_title }}"
+          pr_title="${{ github.event.pull_request.title }}"
 
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
@@ -148,7 +148,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
           git add CHANGELOG.md
-          git commit -m "Update changelog with PR #${{ github.event.pull_request.number }}: ${{ steps.extract-pr-title.outputs.pr_title }}"
+          git commit -m "Update changelog with PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
           
           # Configure GitHub token authentication
           # git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
