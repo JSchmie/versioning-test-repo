@@ -172,6 +172,7 @@ jobs:
   extract-realese-notes: 
     runs-on: ubuntu-latest
     needs: [check-changelog, update-changelog]
+    if: needs.update-changelog.result != 'failure'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
