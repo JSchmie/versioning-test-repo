@@ -154,7 +154,7 @@ jobs:
           # git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
 
           # Push the changes to the remote repository
-          git push origin ${{ github.event.pull_request.ref }}
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
       
       - name: Extract Release Notes
         id: extract-notes
