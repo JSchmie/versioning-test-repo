@@ -7,6 +7,10 @@ on:
         required: false
         type: boolean
         default: false
+      use_current_version:
+        required: false
+        type: boolean
+        default: false
     outputs:
       current_version:
         description: "The current latest version"
