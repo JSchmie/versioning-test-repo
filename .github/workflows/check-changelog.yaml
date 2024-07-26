@@ -1,0 +1,228 @@
+name: Check Changelog
+
+on:
+  workflow_call:
+    inputs:
+      update_changelog:
+        required: false
+        type: boolean
+        default: false
+      use_current_version:
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      current_version:
+        description: "The current latest version"
+        value: ${{ jobs.collect-outputs.outputs.current_version }}
+      next_version:
+        description: "The determined next version"
+        value: ${{ jobs.collect-outputs.outputs.next_version }}
+      release_notes:
+        description: "The extracted release notes"
+        value: ${{ jobs.collect-outputs.outputs.release_notes }}
+
+jobs:
+  check-changelog:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_tag: ${{ steps.get-latest-tag.outputs.latest_tag }}
+      next_version: ${{ steps.determine-new-version.outputs.next_version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Latest Tag
+        id: get-latest-tag
+        run: |
+          # Get the latest tag, or initialize to v0.0.0 if no tags are found
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+          echo "::set-output name=latest_tag::$latest_tag"
+
+      - name: Determine New Version from CHANGELOG
+        id: determine-new-version
+        run: |
+          latest_tag=${{ env.latest_tag }}
+          pr_title="${{ github.event.pull_request.title }}"
+
+          # Extract version from PR title if present
+          version_regex="v([0-9]+)\.([0-9]+)\.([0-9]+)"
+          if [[ $pr_title =~ $version_regex ]]; then
+            major=${BASH_REMATCH[1]}
+            minor=${BASH_REMATCH[2]}
+            patch=${BASH_REMATCH[3]}
+            new_version="v$major.$minor.$patch"
+            echo "Found semantic version in PR title: $new_version"
+          else
+            # Extract the latest version from CHANGELOG.md
+            changelog_version=$(grep -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n 1)
+
+            if [ -z "$changelog_version" ]; then
+              echo "No version found in CHANGELOG.md. Bumping patch version of the latest tag."
+
+              # Split the latest tag into parts
+              IFS='.' read -r -a parts <<< "${latest_tag#v}"
+              major=${parts[0]}
+              minor=${parts[1]}
+              patch=${parts[2]}
+              patch=$((patch + 1))
+              changelog_version="v$major.$minor.$patch"
+            fi
+
+            # Convert versions to comparable formats by removing "v" and padding numbers
+            pad_version() {
+              printf "%03d%03d%03d" $(echo "$1" | tr '.' ' ')
+            }
+
+            padded_changelog_version=$(pad_version "$changelog_version")
+            padded_latest_tag=$(pad_version "${latest_tag#v}")
+
+            # Ensure changelog_version is greater than latest_tag
+            if [ "$padded_changelog_version" -le "$padded_latest_tag" ]; then
+              # Split the latest tag into parts again for suggestion
+              IFS='.' read -r -a parts <<< "${latest_tag#v}"
+              major=${parts[0]}
+              minor=${parts[1]}
+              patch=${parts[2]}
+              next_patch_version="v$major.$minor.$((patch + 1))"
+              next_minor_version="v$major.$((minor + 1)).0"
+              new_version="$next_patch_version"
+              echo "::warning::The New Version determined from CHANGELOG.md ($changelog_version) is not greater than the latest tag ($latest_tag). The latest version should be $next_patch_version or $next_minor_version."
+              
+              # Raise an error if update_changelog is false
+              if [ "${{ inputs.update_changelog }}" = "false" ]; then
+                echo "::error::The determined new version ($clean_version) requires updating the changelog. Please set update_changelog to true."
+                exit 1
+              fi
+            else
+              new_version="$changelog_version"
+            fi
+          fi
+
+          clean_version="${new_version#v}"
+          echo "next_version=$clean_version" >> $GITHUB_ENV
+          echo "::set-output name=next_version::$clean_version"
+          echo "Version determined: $clean_version"
+  
+  update-changelog:
+    needs: check-changelog
+    runs-on: ubuntu-latest
+    if:  ${{ inputs.update_changelog }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+
+      - name: Update CHANGELOG.md
+        id: update-changelog
+        run: |
+          next_version="${{ needs.check-changelog.outputs.next_version }}"
+          clean_version="${next_version#v}"
+          pr_title="${{ github.event.pull_request.title }}"
+          pr_number="${{ github.event.pull_request.number }}"
+          pr_url="${{ github.event.pull_request.html_url }}"
+          echo "Next Version: ${next_version}"
+          echo "Clean Version: ${clean_version}"
+
+          # Ensure clean_version is not empty
+          if [ -z "$clean_version" ]; then
+            echo "Error: clean_version is empty"
+            exit 1
+          fi
+          
+          # Construct the PR link if pr_number and pr_url are set
+          pr_link=""
+          if [ -n "$pr_number" ] && [ -n "$pr_url" ]; then
+            pr_link="[#$pr_number]($pr_url)"
+          fi
+
+          # Add a new version header with the .pre suffix if it doesn't exist
+          # Check if the PR title is already in the changelog
+          if grep -q "$pr_title" CHANGELOG.md; then
+            echo "The PR title is already in the CHANGELOG.md. Skipping addition."
+          else
+            # Add a new version header with the .pre suffix if it doesn't exist
+            if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+              sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+            else
+              sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+            fi
+          fi
+
+          updated_changelog=$(cat CHANGELOG.md)
+          echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$updated_changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Check if there are changes to commit
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add CHANGELOG.md
+            pr_number=${{ github.event.pull_request.number }}
+            pr_title="${{ github.event.pull_request.title }}"
+            git commit -m "Update changelog with PR #$pr_number: $pr_title"
+            
+            # Configure GitHub token authentication
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+            
+            # Push the changes to the source branch of the pull request
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+  
+  extract-release-notes: 
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [check-changelog, update-changelog]
+    outputs:
+      release_notes: ${{ steps.extract-notes.outputs.release_notes }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract Realese Notes
+        run: |
+          version="${{ needs.check-changelog.outputs.next_version }}"
+          clean_version="${version#v}"
+          release_notes=$(awk -v version="$clean_version" '
+            BEGIN { flag=0 }
+            # Start flagging when the version section is found
+            /^## \[.*\]/ {
+              if (flag) exit  # Exit when the next section starts
+            }
+            /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
+            flag { print }  # Print lines while flag is 1
+          ' CHANGELOG.md)
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$release_notes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "::set-output name=release_notes::$release_notes"
+  
+  collect-outputs:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [extract-release-notes, check-changelog, update-changelog]
+    outputs:
+      current_version: ${{ needs.check-changelog.outputs.latest_tag }}
+      next_version: ${{ needs.check-changelog.outputs.next_version }}
+      release_notes: ${{ needs.extract-release-notes.outputs.release_notes }}
+    steps:
+      - name: Output Results
+        run: |
+          echo "Current Version: ${{ needs.check-changelog.outputs.latest_tag }}"
+          echo "Next Version: ${{ needs.check-changelog.outputs.next_version }}"
+          echo "Release Notes: ${{ needs.extract-release-notes.outputs.release_notes }}"
+          
