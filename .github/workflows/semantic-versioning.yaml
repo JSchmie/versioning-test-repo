@@ -19,6 +19,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Call Check Changelog Workflow
         id: check-changelog
         uses: ./.github/workflows/check-changelog.yaml
