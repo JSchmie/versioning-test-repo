@@ -2,6 +2,8 @@
 
 ## [0.2.8.pre] - 2024-07-29
 
+- merge to main [#148](https://github.com/JSchmie/versioning-test-repo/pull/148)
+
 - Added some code to fix bug [#147](https://github.com/JSchmie/versioning-test-repo/pull/147)
 
 ## [0.2.7] - 2024-06-27
