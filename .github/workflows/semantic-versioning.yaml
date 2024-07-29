@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Call Check Changelog Workflow
         id: check-changelog
-        uses: ./.github/workflows/check-changelog.yml
+        uses: ./.github/workflows/check-changelog.yaml
 
       - name: Bump Version and Tag
         id: bump_version
