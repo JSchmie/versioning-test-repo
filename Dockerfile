@@ -1,3 +1,3 @@
 FROM busybox
 
-CMD [ "ls","/" ]
+CMD [ "ls","-lah","/" ]
