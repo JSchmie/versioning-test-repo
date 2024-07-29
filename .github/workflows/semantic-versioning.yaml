@@ -7,11 +7,16 @@ on:
       - main
 
 jobs:
-  bump-version:
+
+  check-changelog:
     if: |
-        github.event.pull_request.merged == true &&
-        github.event.pull_request.base.ref == 'main' &&
-        contains(github.event.pull_request.labels.*.name, 'release')
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      contains(github.event.pull_request.labels.*.name, 'release')
+    uses: ./.github/workflows/check-changelog.yaml
+  
+  bump-version:
+    needs: check-changelog
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -19,19 +24,14 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Call Check Changelog Workflow
-        id: check-changelog
-        uses: ./.github/workflows/check-changelog.yaml
 
       - name: Bump Version and Tag
         id: bump_version
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-
-          latest_tag="${{ steps.check-changelog.outputs.current_version }}"
-          next_version="${{ steps.check-changelog.outputs.next_version }}"
+          latest_tag="${{ needs.check-changelog.outputs.current_version }}"
+          next_version="${{ needs.check-changelog.outputs.next_version }}"
 
           echo "Bumping version from $latest_tag to v$next_version"
 
@@ -43,22 +43,25 @@ jobs:
 
           # Push the new tag to the remote repository
           git push origin "v$next_version"
-
+      
       - name: Extract Release Notes
         id: extract_notes
         run: |
-          release_notes="${{ steps.check-changelog.outputs.release_notes }}"
+          release_notes="${{ needs.check-changelog.outputs.release_notes }}"
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-
+      
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: "v${{ steps.check-changelog.outputs.next_version }}"
-          release_name: Release "v${{ steps.check-changelog.outputs.next_version }}"
+          tag_name: "v${{ needs.check-changelog.outputs.next_version }}"
+          release_name: Release "v${{ needs.check-changelog.outputs.next_version }}"
           body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
+      
+
+
