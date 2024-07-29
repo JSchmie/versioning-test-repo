@@ -2,6 +2,8 @@
 
 ## [0.2.8.pre] - 2024-07-29
 
+- added Dunamei testfile and updated CI  [#155](https://github.com/JSchmie/versioning-test-repo/pull/155)
+
 - Develop [#154](https://github.com/JSchmie/versioning-test-repo/pull/154)
 
 - Test [#153](https://github.com/JSchmie/versioning-test-repo/pull/153)
