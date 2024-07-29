@@ -1,2 +1,3 @@
-Some docker stuff
-Some more docker Stuff
+FROM busybox
+
+CMD [ "ls","-lah","/" ]
