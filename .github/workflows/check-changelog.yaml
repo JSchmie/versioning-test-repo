@@ -155,6 +155,11 @@ jobs:
             fi
           fi
 
+          if [ ${{ github.base_ref }} = "main" ]; then
+            # if merging into main remove pre-release suffix from changelog
+            sed -i "s/^## \[$clean_version.pre\]/## \[$clean_version\]/g" CHANGELOG.md
+          fi
+
           updated_changelog=$(cat CHANGELOG.md)
           echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$updated_changelog" >> $GITHUB_ENV
