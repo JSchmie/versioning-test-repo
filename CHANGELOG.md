@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0.pre] - 2024-07-29
+
+- Shortened our code base [#157](https://github.com/JSchmie/versioning-test-repo/pull/157)
+
 ## [0.3.0] - 2024-07-29
 
 - we made the code much shorter 
