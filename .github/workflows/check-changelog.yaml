@@ -150,29 +150,39 @@ jobs:
             pr_link="[#$pr_number]($pr_url)"
           fi
 
-          # Add a new version header with the .pre suffix if it doesn't exist
-          # Check if the PR title is already in the changelog
           if grep -q "$pr_title" CHANGELOG.md; then
             echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
+            echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
             if [ "$include_pre_tag" = true ]; then
+              echo "include_pre_tag is set to true."
               if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
+                # Rename the existing version to include .pre
                 sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
               fi
               if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                echo "Adding new entry for version $clean_version.pre."
                 sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
               else
+                echo "Appending to existing entry for version $clean_version.pre."
                 sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
               fi
             else
+              echo "include_pre_tag is set to false."
               if [ "$remove_pre_tag" = true ]; then
+                echo "remove_pre_tag is set to true."
                 if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                  echo "Found version $clean_version.pre. Renaming to remove .pre tag."
+                  # Rename the existing version to remove .pre
                   sed -i "s/^## \[$clean_version.pre\]/## [$clean_version]/" CHANGELOG.md
                 fi
               fi
-              if ! grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+              if ! grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                echo "Adding new entry for version $clean_version."
                 sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
-              else
+              elif grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+                echo "Appending to existing entry for version $clean_version."
                 sed -i "/^## \[$clean_version\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
               fi
             fi
