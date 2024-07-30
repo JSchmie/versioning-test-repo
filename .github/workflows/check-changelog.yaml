@@ -11,6 +11,14 @@ on:
         required: false
         type: boolean
         default: false
+      include_pre_tag:
+        required: false
+        type: boolean
+        default: false
+      remove_pre_tag: 
+        required: false
+        type: boolean
+        default: false
     outputs:
       current_version:
         description: "The current latest version"
@@ -144,16 +152,29 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           # Check if the PR title is already in the changelog
-          if grep -q "$pr_title" CHANGELOG.md; then
+                    if grep -q "$pr_title" CHANGELOG.md; then
             echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
-            # Add a new version header with the .pre suffix if it doesn't exist
-            if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-              sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+            if [ "$include_pre_tag" = true ]; then
+              if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+              else
+                sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+              fi
             else
-              sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+              if [ "$remove_pre_tag" = true ]; then
+                if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                  sed -i "s/^## \[$clean_version.pre\]/## [$clean_version]/" CHANGELOG.md
+                fi
+              fi
+              if ! grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+                sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+              else
+                sed -i "/^## \[$clean_version\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+              fi
             fi
           fi
+
 
           updated_changelog=$(cat CHANGELOG.md)
           echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
