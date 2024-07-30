@@ -152,10 +152,13 @@ jobs:
 
           # Add a new version header with the .pre suffix if it doesn't exist
           # Check if the PR title is already in the changelog
-                    if grep -q "$pr_title" CHANGELOG.md; then
+          if grep -q "$pr_title" CHANGELOG.md; then
             echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
             if [ "$include_pre_tag" = true ]; then
+              if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+              fi
               if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
                 sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
               else
@@ -174,6 +177,7 @@ jobs:
               fi
             fi
           fi
+
 
 
           updated_changelog=$(cat CHANGELOG.md)
