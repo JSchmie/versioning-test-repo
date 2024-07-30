@@ -152,6 +152,7 @@ jobs:
 
           if grep -q "$pr_title" CHANGELOG.md; then
             echo "The PR title is already in the CHANGELOG.md. Skipping addition."
+            echo "$pr_title"
           else
             echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
             if [ "$include_pre_tag" = true ]; then
@@ -187,8 +188,6 @@ jobs:
               fi
             fi
           fi
-
-
 
           updated_changelog=$(cat CHANGELOG.md)
           echo "UPDATED_CHANGELOG<<EOF" >> $GITHUB_ENV
