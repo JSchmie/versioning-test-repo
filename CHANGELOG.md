@@ -1,9 +1,5 @@
 # Changelog
 
-## [0.3.1] - 2024-07-30
-
-- make code longer [#163](https://github.com/JSchmie/versioning-test-repo/pull/163)
-
 ## [0.3.1.pre] - 2024-07-29
 
 - Steffens much needed improvements [#160](https://github.com/JSchmie/versioning-test-repo/pull/160)
