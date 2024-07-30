@@ -29,3 +29,4 @@ jobs:
     uses: ./.github/workflows/check-changelog.yaml
     with:
       update_changelog: true
+      include_pre_tag : true
