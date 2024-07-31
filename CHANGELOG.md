@@ -1,6 +1,8 @@
 # Changelog
 
-## [0.2.8] - 2024-07-31
+## [0.2.8.pre] - 2024-07-31
+
+- Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
 
 - Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
 
