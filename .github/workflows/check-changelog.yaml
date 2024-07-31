@@ -118,7 +118,6 @@ jobs:
   update-changelog:
     needs: check-changelog
     runs-on: ubuntu-latest
-    if:  ${{ inputs.update_changelog }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -126,23 +125,69 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.ref }}
+          
+      - name: Include .pre Tag in CHANGELOG.md
+        if: ${{ inputs.include_pre_tag }}
+        run: |
+          next_version="${{ needs.check-changelog.outputs.next_version }}"
+          clean_version="${next_version#v}"
+          
+          echo "Next Version: ${next_version}"
+          echo "Clean Version: ${clean_version}"
+      
+          # Ensure clean_version is not empty
+          if [ -z "$clean_version" ]; then
+            echo "Error: clean_version is empty"
+            exit 1
+          fi
+      
+          # Include .pre tag
+          if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+            echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
+            sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+          fi
+      
+          updated_changelog=$(cat CHANGELOG.md)
+          echo "$updated_changelog"
 
+      - name: Remove .pre Tag from CHANGELOG.md
+        if: ${{ inputs.remove_pre_tag }}
+        run: |
+          next_version="${{ needs.check-changelog.outputs.next_version }}"
+          clean_version="${next_version#v}"
+          
+          echo "Next Version: ${next_version}"
+          echo "Clean Version: ${clean_version}"
+      
+          # Ensure clean_version is not empty
+          if [ -z "$clean_version" ]; then
+            echo "Error: clean_version is empty"
+            exit 1
+          fi
+      
+          # Remove .pre tag
+          if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+            echo "Found version $clean_version.pre. Renaming to remove .pre tag."
+            sed -i "s/^## \[$clean_version.pre\]/## [$clean_version]/" CHANGELOG.md
+          fi
+      
+          updated_changelog=$(cat CHANGELOG.md)
+          echo "$updated_changelog"
+        
       - name: Update CHANGELOG.md
-        id: update-changelog
+        if: ${{ inputs.update_changelog }}
         run: |
           next_version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${next_version#v}"
           pr_title="${{ github.event.pull_request.title }}"
           pr_number="${{ github.event.pull_request.number }}"
           pr_url="${{ github.event.pull_request.html_url }}"
-          include_pre_tag=${{ inputs.include_pre_tag }}
-          remove_pre_tag=${{ inputs.remove_pre_tag }}
           
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
           echo "PR Title: ${pr_title}"
           echo "PR Number: ${pr_number}"
-
+      
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
             echo "Error: clean_version is empty"
@@ -155,56 +200,26 @@ jobs:
             pr_link="[#$pr_number]($pr_url)"
           fi
           
-          # Handle .pre tag inclusion or removal
-          if [ "$include_pre_tag" = "true" ]; then
-              echo "include_pre_tag is set to true."
-              if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-                  echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
-                  # Rename the existing version to include .pre
-                  sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
-              fi
-          else
-              echo "include_pre_tag is set to false."
-              if [ "$remove_pre_tag" = "true" ]; then
-                  echo "remove_pre_tag is set to true."
-                  if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-                      echo "Found version $clean_version.pre. Renaming to remove .pre tag."
-                      # Rename the existing version to remove .pre
-                      sed -i "s/^## \[$clean_version.pre\]/## [$clean_version]/" CHANGELOG.md
-                  fi
-              fi
-          fi
-          
-          # remove pre tag 
-          if [ "$remove_pre_tag" = "true" ]; then
-            echo "remove_pre_tag is set to true."
-            if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-              echo "Found version $clean_version.pre. Renaming to remove .pre tag."
-              # Rename the existing version to remove .pre
-              sed -i "s/^## \[$clean_version.pre\]/## [$clean_version]/" CHANGELOG.md
-            fi
-          fi
-
           # Add PR title to the changelog
           if grep -q -F "$pr_title $pr_link" CHANGELOG.md; then
-              echo "The PR title is already in the CHANGELOG.md. Skipping addition."
+            echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
-              echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
-              if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-                  echo "Appending to existing entry for version $clean_version.pre."
-                  sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
-              elif grep -q "^## \[$clean_version\]" CHANGELOG.md; then
-                  echo "Appending to existing entry for version $clean_version."
-                  sed -i "/^## \[$clean_version\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
-              else
-                  echo "Adding new entry for version $clean_version."
-                  sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
-              fi
+            echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
+            if grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+              echo "Appending to existing entry for version $clean_version.pre."
+              sed -i "/^## \[$clean_version.pre\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+            elif grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+              echo "Appending to existing entry for version $clean_version."
+              sed -i "/^## \[$clean_version\]/a\\\n- $pr_title $pr_link" CHANGELOG.md
+            else
+              echo "Adding new entry for version $clean_version."
+              sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- $pr_title $pr_link" CHANGELOG.md
+            fi
           fi
-
+      
           updated_changelog=$(cat CHANGELOG.md)
           echo "$updated_changelog"
-
+        
       - name: Commit and Push Changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -255,3 +270,22 @@ jobs:
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
+
+  collect-outputs:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [extract-release-notes, check-changelog]
+    outputs:
+      current_version: ${{ needs.check-changelog.outputs.latest_tag }}
+      next_version: ${{ needs.check-changelog.outputs.next_version }}
+      release_notes: ${{ needs.extract-release-notes.outputs.release_notes }}
+    steps:
+      - name: Output Results
+        run: |
+          echo "Current Version: ${{ needs.check-changelog.outputs.latest_tag }}"
+          echo "Next Version: ${{ needs.check-changelog.outputs.next_version }}"
+          echo "Release Notes: ${{ needs.extract-release-notes.outputs.release_notes }}"
+          echo "::set-output name=current_version::${{ needs.check-changelog.outputs.latest_tag }}"
+          echo "::set-output name=next_version::${{ needs.check-changelog.outputs.next_version }}"
+          echo "::set-output name=release_notes::${{ needs.extract-release-notes.outputs.release_notes }}"
+      
