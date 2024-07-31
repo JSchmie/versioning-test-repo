@@ -126,14 +126,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.ref }}
           
-      - name: Include .pre Tag in CHANGELOG.md
-        if: ${{ inputs.include_pre_tag }}
+      - name: Add New Version to CHANGELOG.md
+        if: ${{ inputs.update_changelog }}
         run: |
           next_version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${next_version#v}"
+          include_pre_tag=${{ inputs.include_pre_tag }}
           
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
+          echo "Include Pre Tag: ${include_pre_tag}"
       
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
@@ -141,10 +143,22 @@ jobs:
             exit 1
           fi
       
-          # Include .pre tag
-          if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-            echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
-            sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+          # Add new version with .pre tag if include_pre_tag is true
+          if [ "$include_pre_tag" = "true" ]; then
+              echo "include_pre_tag is set to true."
+              if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                  echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
+                  sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+              else
+                  echo "Adding new version $clean_version.pre."
+                  sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- New release" CHANGELOG.md
+              fi
+          else
+              echo "include_pre_tag is set to false."
+              if ! grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+                  echo "Adding new version $clean_version."
+                  sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- New release" CHANGELOG.md
+              fi
           fi
       
           updated_changelog=$(cat CHANGELOG.md)
