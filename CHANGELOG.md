@@ -2,6 +2,10 @@
 
 ## [0.2.8.pre] - 2024-07-31
 
+- update labler to debug [#166](https://github.com/JSchmie/versioning-test-repo/pull/166)
+
+- Develop [#165](https://github.com/JSchmie/versioning-test-repo/pull/165)
+
 - Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
 
 ## [0.2.7] - 2024-06-27
