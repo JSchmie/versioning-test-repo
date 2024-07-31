@@ -19,6 +19,10 @@ on:
         required: false
         type: boolean
         default: false
+      target_branch:
+        required: false
+        type: string
+        default: ${{ github.event.pull_request.head.ref }}
     outputs:
       current_version:
         description: "The current latest version"
@@ -265,7 +269,7 @@ jobs:
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
             
             # Push the changes to the source branch of the pull request
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            git push origin HEAD:${{ inputs.target_branch }}
           fi
   
   extract-release-notes: 
