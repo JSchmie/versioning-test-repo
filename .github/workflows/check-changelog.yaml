@@ -186,7 +186,7 @@ jobs:
           fi
 
           # Add PR title to the changelog
-          if grep -q "$pr_title $pr_link" CHANGELOG.md; then
+          if grep -q -F "$pr_title $pr_link" CHANGELOG.md; then
               echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
               echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
