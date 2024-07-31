@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.8] - 2024-07-31
+
+- Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
+
 ## [0.2.7] - 2024-06-27
 - Fixed PyPI Upload yaml.
     - Now tiggers the test and PyPI upload seperatly when using workflow dispatch. 
