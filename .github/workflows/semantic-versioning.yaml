@@ -16,6 +16,7 @@ jobs:
     uses: ./.github/workflows/check-changelog.yaml
     with: 
       remove_pre_tag: true
+      target_branch: ${{ github.event.pull_request.base.ref }}
   
   bump-version:
     needs: check-changelog
