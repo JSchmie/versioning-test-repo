@@ -1,30 +1,8 @@
 # Changelog
 
-## [0.3.1.pre] - 2024-07-29
+## [0.2.8.pre] - 2024-07-31
 
-- Steffens much needed improvements [#160](https://github.com/JSchmie/versioning-test-repo/pull/160)
-
-- minor changes in Dockerfile and main.py [#159](https://github.com/JSchmie/versioning-test-repo/pull/159)
-
-- switch base image in Dockerfile [#144](https://github.com/JSchmie/versioning-test-repo/pull/144)
-
-## [0.3.0.pre] - 2024-07-29
-
-- Shortened our code base [#157](https://github.com/JSchmie/versioning-test-repo/pull/157)
-
-## [0.2.8.pre] - 2024-07-29
-
-- added Dunamei testfile and updated CI  [#155](https://github.com/JSchmie/versioning-test-repo/pull/155)
-
-- Develop [#154](https://github.com/JSchmie/versioning-test-repo/pull/154)
-
-- Test [#153](https://github.com/JSchmie/versioning-test-repo/pull/153)
-
-- code changes [#151](https://github.com/JSchmie/versioning-test-repo/pull/151)
-
-- merge to main [#148](https://github.com/JSchmie/versioning-test-repo/pull/148)
-
-- Added some code to fix bug [#147](https://github.com/JSchmie/versioning-test-repo/pull/147)
+- Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
 
 ## [0.2.7] - 2024-06-27
 - Fixed PyPI Upload yaml.
