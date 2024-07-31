@@ -2,10 +2,6 @@
 
 ## [0.2.8.pre] - 2024-07-31
 
-- New release
-
-## [0.2.8.pre] - 2024-07-31
-
 - More changes to the Actions [#167](https://github.com/JSchmie/versioning-test-repo/pull/167)
 
 - update labler to debug [#166](https://github.com/JSchmie/versioning-test-repo/pull/166)
