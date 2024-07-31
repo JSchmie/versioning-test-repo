@@ -256,7 +256,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
 
-  ollect-outputs:
+  collect-outputs:
     runs-on: ubuntu-latest
     if: always()
     needs: [extract-release-notes]
