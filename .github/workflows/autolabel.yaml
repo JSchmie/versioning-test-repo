@@ -30,13 +30,3 @@ jobs:
     with:
       update_changelog: true
       include_pre_tag : true
-  
-  Get_outputs:
-      needs: check-changelog
-      runs-on: ubuntu-latest
-      steps: 
-        - name: Get Outputs
-          run: |
-            echo "${{ needs.check-changelog.outputs.current_version }}"
-            echo "${{ needs.check-changelog.outputs.next_version }}"
-            echo "${{ needs.check-changelog.outputs.release_notes }}"
