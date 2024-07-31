@@ -2,6 +2,8 @@
 
 ## [0.2.9.pre] - 2024-07-31
 
+- Develop [#170](https://github.com/JSchmie/versioning-test-repo/pull/170)
+
 - create target_branch input to the actions [#169](https://github.com/JSchmie/versioning-test-repo/pull/169)
 
 
