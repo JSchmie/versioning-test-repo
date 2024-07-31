@@ -259,7 +259,7 @@ jobs:
   collect-outputs:
     runs-on: ubuntu-latest
     if: always()
-    needs: [extract-release-notes]
+    needs: [extract-release-notes, check-changelog]
     outputs:
       current_version: ${{ needs.check-changelog.outputs.latest_tag }}
       next_version: ${{ needs.check-changelog.outputs.next_version }}
@@ -270,3 +270,7 @@ jobs:
           echo "Current Version: ${{ needs.check-changelog.outputs.latest_tag }}"
           echo "Next Version: ${{ needs.check-changelog.outputs.next_version }}"
           echo "Release Notes: ${{ needs.extract-release-notes.outputs.release_notes }}"
+          echo "::set-output name=current_version::${{ needs.check-changelog.outputs.latest_tag }}"
+          echo "::set-output name=next_version::${{ needs.check-changelog.outputs.next_version }}"
+          echo "::set-output name=release_notes::${{ needs.extract-release-notes.outputs.release_notes }}"
+      
