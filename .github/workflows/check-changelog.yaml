@@ -140,8 +140,6 @@ jobs:
           echo "Clean Version: ${clean_version}"
           echo "PR Title: ${pr_title}"
           echo "PR Number: ${pr_number}"
-          echo "Include .pre Tag: ${include_pre_tag}"
-          echo "Remove .pre Tag: ${remove_pre_tag}"
 
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
@@ -186,7 +184,7 @@ jobs:
           fi
 
           # Add PR title to the changelog
-          if grep -q $pr_title $pr_link" CHANGELOG.md; then
+          if grep -q "$pr_title $pr_link" CHANGELOG.md; then
               echo "The PR title is already in the CHANGELOG.md. Skipping addition."
           else
               echo "The PR title is not in the CHANGELOG.md. Proceeding with addition."
