@@ -135,6 +135,8 @@ jobs:
           pr_title="${{ github.event.pull_request.title }}"
           pr_number="${{ github.event.pull_request.number }}"
           pr_url="${{ github.event.pull_request.html_url }}"
+          include_pre_tag=${{ inputs.include_pre_tag }}
+          remove_pre_tag=${{ inputs.remove_pre_tag }}
           
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
