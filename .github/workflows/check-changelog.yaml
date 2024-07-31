@@ -136,33 +136,46 @@ jobs:
           echo "Next Version: ${next_version}"
           echo "Clean Version: ${clean_version}"
           echo "Include Pre Tag: ${include_pre_tag}"
-      
+
           # Ensure clean_version is not empty
           if [ -z "$clean_version" ]; then
-            echo "Error: clean_version is empty"
-            exit 1
+              echo "Error: clean_version is empty"
+              exit 1
           fi
-      
+
           # Add new version with .pre tag if include_pre_tag is true
           if [ "$include_pre_tag" = "true" ]; then
               echo "include_pre_tag is set to true."
-              if grep -q "^## \[$clean_version\]" CHANGELOG.md && ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
-                  echo "Found version $clean_version without .pre tag. Renaming to include .pre tag."
-                  sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+              echo "Checking if version $clean_version exists without .pre tag."
+              if grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+                  echo "Found version $clean_version in CHANGELOG.md"
+                  if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                      echo "Version $clean_version.pre not found in CHANGELOG.md"
+                      echo "Renaming version $clean_version to include .pre tag."
+                      sed -i "s/^## \[$clean_version\]/## [$clean_version.pre]/" CHANGELOG.md
+                  else
+                      echo "Version $clean_version.pre already exists in CHANGELOG.md"
+                  fi
               else
-                  echo "Adding new version $clean_version.pre."
-                  sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n- New release" CHANGELOG.md
+                  echo "Version $clean_version not found in CHANGELOG.md"
+                  if ! grep -q "^## \[$clean_version.pre\]" CHANGELOG.md; then
+                      echo "Adding new version $clean_version.pre."
+                      sed -i "/^# Changelog/a\\\n## [$clean_version.pre] - $(date +%Y-%m-%d)\n\n" CHANGELOG.md
+                  else
+                      echo "Version $clean_version.pre already exists in CHANGELOG.md"
+                  fi
               fi
           else
               echo "include_pre_tag is set to false."
+              echo "Checking if version $clean_version exists."
               if ! grep -q "^## \[$clean_version\]" CHANGELOG.md; then
+                  echo "Version $clean_version not found in CHANGELOG.md"
                   echo "Adding new version $clean_version."
-                  sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n- New release" CHANGELOG.md
+                  sed -i "/^# Changelog/a\\\n## [$clean_version] - $(date +%Y-%m-%d)\n\n" CHANGELOG.md
+              else
+                  echo "Version $clean_version already exists in CHANGELOG.md"
               fi
           fi
-      
-          updated_changelog=$(cat CHANGELOG.md)
-          echo "$updated_changelog"
 
       - name: Remove .pre Tag from CHANGELOG.md
         if: ${{ inputs.remove_pre_tag }}
