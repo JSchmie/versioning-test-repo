@@ -290,10 +290,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ inputs.target_branch }}
           
-      - name: Extract Realese Notes
+      - name: Extract Release Notes
         run: |
           version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${version#v}"
+          echo "Extracting release notes for version: $clean_version"
+
+
           release_notes=$(awk -v version="$clean_version" '
             BEGIN { flag=0 }
             # Start flagging when the version section is found
@@ -303,11 +306,15 @@ jobs:
             /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
             flag { print }  # Print lines while flag is 1
           ' CHANGELOG.md)
+
+          echo "Extracted release notes:"
+          echo "$release_notes"
+
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
-          echo "$release_notes"
+
 
   collect-outputs:
     runs-on: ubuntu-latest
