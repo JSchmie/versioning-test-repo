@@ -13,21 +13,10 @@ jobs:
       github.event.pull_request.merged == true &&
       github.event.pull_request.base.ref == 'main' &&
       contains(github.event.pull_request.labels.*.name, 'release')
-    runs-on: ubuntu-latest
-    outputs:
-      current_version: ${{ steps.set-outputs-main.outputs.current_version }}
-      next_version: ${{ steps.set-outputs-main.outputs.next_version }}
-      release_notes: ${{ steps.set-outputs-main.outputs.release_notes }}
-    steps:
-    - name: Handle Changelog for main branch
-      uses: ./.github/workflows/check-changelog.yaml
-      with: 
-        remove_pre_tag: true
-        target_branch: ${{ github.event.pull_request.base.ref }}
-    - name: Handle Changelog for develop branch
-      uses: ./.github/workflows/check-changelog.yaml
-      with: 
-        remove_pre_tag: true
+    uses: ./.github/workflows/check-changelog.yaml
+    with: 
+      remove_pre_tag: true
+      target_branch: ${{ github.event.pull_request.base.ref }}
   
   bump-version:
     needs: check-changelog
