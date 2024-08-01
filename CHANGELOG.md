@@ -1,6 +1,14 @@
 # Changelog
 
-## [0.2.8.pre] - 2024-07-31
+## [0.2.9.pre] - 2024-07-31
+
+- create target_branch input to the actions [#169](https://github.com/JSchmie/versioning-test-repo/pull/169)
+
+
+
+## [0.2.8] - 2024-07-31
+
+- Develop [#168](https://github.com/JSchmie/versioning-test-repo/pull/168)
 
 - More changes to the Actions [#167](https://github.com/JSchmie/versioning-test-repo/pull/167)
 
