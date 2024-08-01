@@ -300,10 +300,9 @@ jobs:
           release_notes=$(awk -v version="$clean_version" '
             BEGIN { flag=0 }
             # Start flagging when the version section is found
-            /^## \[.*\]/ {
-              if (flag) exit  # Exit when the next section starts
-            }
-            /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
+            $0 ~ "^## \\[" version "\\]" || $0 ~ "^## \\[" version "\\.pre\\]" { flag=1; next }  # Start printing after the header
+            # Stop flagging when the next version section is found
+            $0 ~ "^## \\[.*\\]" { if (flag) exit }
             flag { print }  # Print lines while flag is 1
           ' CHANGELOG.md)
 
