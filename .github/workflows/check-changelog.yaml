@@ -307,8 +307,6 @@ jobs:
           ' CHANGELOG.md)
 
           echo "Extracted release notes:"
-          echo "$release_notes"
-
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
