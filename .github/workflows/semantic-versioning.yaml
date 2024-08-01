@@ -48,6 +48,9 @@ jobs:
           # Push the new tag to the remote repository
           git push origin "v$next_version"
           
+      - name: get release notes
+        run: echo "${{ needs.check-changelog.outputs.release_notes }}"
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
