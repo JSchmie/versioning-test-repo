@@ -46,15 +46,7 @@ jobs:
 
           # Push the new tag to the remote repository
           git push origin "v$next_version"
-      
-      - name: Extract Release Notes
-        id: extract_notes
-        run: |
-          release_notes="${{ needs.check-changelog.outputs.release_notes }}"
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$release_notes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-      
+          
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -62,7 +54,7 @@ jobs:
         with:
           tag_name: "v${{ needs.check-changelog.outputs.next_version }}"
           release_name: Release v${{ needs.check-changelog.outputs.next_version }}
-          body: ${{ env.RELEASE_NOTES }}
+          body: ${{ needs.check-changelog.outputs.release_notes }}
           draft: false
           prerelease: false
       

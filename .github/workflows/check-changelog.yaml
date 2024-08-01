@@ -284,6 +284,8 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+          
       - name: Extract Realese Notes
         run: |
           version="${{ needs.check-changelog.outputs.next_version }}"
