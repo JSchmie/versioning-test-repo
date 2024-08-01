@@ -2,6 +2,8 @@
 
 ## [0.2.12.pre] - 2024-08-01
 
+- Some very important release notes [#178](https://github.com/JSchmie/versioning-test-repo/pull/178)
+
 - Test [#177](https://github.com/JSchmie/versioning-test-repo/pull/177)
 
 
