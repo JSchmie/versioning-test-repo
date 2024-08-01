@@ -270,6 +270,10 @@ jobs:
             
             # Push the changes to the source branch of the pull request
             git push origin HEAD:${{ inputs.target_branch }}
+
+            if [ "${{ inputs.target_branch }}" != "${{ github.event.pull_request.head.ref}}" ]; then
+              git push origin HEAD:${{ github.event.pull_request.head.ref}}
+            fi
           fi
   
   extract-release-notes: 
@@ -284,25 +288,30 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.ref }}
+          ref: ${{ inputs.target_branch }}
           
-      - name: Extract Realese Notes
+      - name: Extract Release Notes
         run: |
           version="${{ needs.check-changelog.outputs.next_version }}"
           clean_version="${version#v}"
+          echo "Extracting release notes for version: $clean_version"
+
+
           release_notes=$(awk -v version="$clean_version" '
             BEGIN { flag=0 }
             # Start flagging when the version section is found
-            /^## \[.*\]/ {
-              if (flag) exit  # Exit when the next section starts
-            }
-            /^## \['"$clean_version"'\]/ { flag=1; next }  # Start printing after the header
+            $0 ~ "^## \\[" version "\\]" || $0 ~ "^## \\[" version "\\.pre\\]" { flag=1; next }  # Start printing after the header
+            # Stop flagging when the next version section is found
+            $0 ~ "^## \\[.*\\]" { if (flag) exit }
             flag { print }  # Print lines while flag is 1
           ' CHANGELOG.md)
+
+          echo "Extracted release notes:"
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
+
 
   collect-outputs:
     runs-on: ubuntu-latest
