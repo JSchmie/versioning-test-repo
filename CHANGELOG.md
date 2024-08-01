@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.11.pre] - 2024-08-01
+
+- more code changes [#175](https://github.com/JSchmie/versioning-test-repo/pull/175)
+
+
+
 ## [0.2.10.pre] - 2024-08-01
 
 - Develop [#173](https://github.com/JSchmie/versioning-test-repo/pull/173)
