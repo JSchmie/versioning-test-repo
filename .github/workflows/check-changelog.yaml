@@ -312,7 +312,10 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
 
-
+      - name: Print Release Notes
+        run: 
+          echo "${{ env.RELEASE_NOTES }}"
+          
   collect-outputs:
     runs-on: ubuntu-latest
     if: always()
