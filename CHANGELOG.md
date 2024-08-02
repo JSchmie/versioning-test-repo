@@ -2,6 +2,8 @@
 
 ## [0.2.13.pre] - 2024-08-01
 
+- Develop [#180](https://github.com/JSchmie/versioning-test-repo/pull/180)
+
 - Test [#179](https://github.com/JSchmie/versioning-test-repo/pull/179)
 
 
