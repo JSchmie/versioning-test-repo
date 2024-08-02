@@ -47,6 +47,11 @@ jobs:
         run: |
           echo "Release Notes: ${{ needs.check-changelog.outputs.release_notes }}"
       
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract Release Notes
         run: |
           version="${{ needs.check-changelog.outputs.next_version }}"
@@ -68,7 +73,7 @@ jobs:
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
-          
+
       - name: print from Env
         run: |
           echo "Release Notes from ENV: ${{ env.RELEASE_NOTES }}"
