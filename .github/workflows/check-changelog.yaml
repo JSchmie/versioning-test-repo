@@ -277,6 +277,7 @@ jobs:
           fi
   
   extract-release-notes: 
+    # does not work properly since multi line outputs are not well handled
     runs-on: ubuntu-latest
     if: always()
     needs: [check-changelog, update-changelog]
@@ -306,26 +307,12 @@ jobs:
             flag { print }  # Print lines while flag is 1
           ' CHANGELOG.md)
 
-          # Format the release notes for GitHub Actions
-          release_notes="${release_notes//'%'/'%25'}"
-          release_notes="${release_notes//$'\n'/'%0A'}"
-          release_notes="${release_notes//$'\r'/'%0D'}"
-
+          echo "Extracted release notes:"
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$release_notes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           echo "::set-output name=release_notes::$release_notes"
-          echo "release_notes=$release_notes" >> $GITHUB_ENV
 
-          # echo "Extracted release notes:"
-          # echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          # echo "$release_notes" >> $GITHUB_ENV
-          # echo "EOF" >> $GITHUB_ENV
-          # echo "::set-output name=release_notes::$release_notes"
-
-      - name: Print Release Notes
-        run: 
-          echo "${{ env.RELEASE_NOTES }}"
-      - name: Print Release Notes from output
-        run: 
-          echo "${{ steps.output.release_notes }}"
   collect-outputs:
     runs-on: ubuntu-latest
     if: always()
