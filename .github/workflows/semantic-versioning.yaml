@@ -48,8 +48,27 @@ jobs:
           # Push the new tag to the remote repository
           git push origin "v$next_version"
           
-      - name: get release notes
-        run: echo "${{ needs.check-changelog.outputs.release_notes }}"
+      - name: Extract Release Notes
+        run: |
+          version="${{ needs.check-changelog.outputs.next_version }}"
+          clean_version="${version#v}"
+          echo "Extracting release notes for version: $clean_version"
+
+
+          release_notes=$(awk -v version="$clean_version" '
+            BEGIN { flag=0 }
+            # Start flagging when the version section is found
+            $0 ~ "^## \\[" version "\\]" || $0 ~ "^## \\[" version "\\.pre\\]" { flag=1; next }  # Start printing after the header
+            # Stop flagging when the next version section is found
+            $0 ~ "^## \\[.*\\]" { if (flag) exit }
+            flag { print }  # Print lines while flag is 1
+          ' CHANGELOG.md)
+
+          echo "Extracted release notes:"
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$release_notes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "::set-output name=release_notes::$release_notes"
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -58,7 +77,7 @@ jobs:
         with:
           tag_name: "v${{ needs.check-changelog.outputs.next_version }}"
           release_name: Release v${{ needs.check-changelog.outputs.next_version }}
-          body: ${{ needs.check-changelog.outputs.release_notes }}
+          body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
       
