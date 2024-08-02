@@ -325,7 +325,7 @@ jobs:
           echo "${{ env.RELEASE_NOTES }}"
       - name: Print Release Notes from output
         run: 
-          echo "${{ steps.output.test }}"
+          echo "${{ steps.output.release_notes }}"
   collect-outputs:
     runs-on: ubuntu-latest
     if: always()
@@ -333,13 +333,13 @@ jobs:
     outputs:
       current_version: ${{ needs.check-changelog.outputs.latest_tag }}
       next_version: ${{ needs.check-changelog.outputs.next_version }}
-      release_notes: ${{ needs.extract-release-notes.outputs.test }}
+      release_notes: ${{ needs.extract-release-notes.outputs.release_notes }}
     steps:
       - name: Output Results
         run: |
           echo "Current Version: ${{ needs.check-changelog.outputs.latest_tag }}"
           echo "Next Version: ${{ needs.check-changelog.outputs.next_version }}"
-          echo "Release Notes: ${{ needs.extract-release-notes.outputs.test }}"
+          echo "Release Notes: ${{ needs.extract-release-notes.outputs.release_notes }}"
           echo "::set-output name=current_version::${{ needs.check-changelog.outputs.latest_tag }}"
           echo "::set-output name=next_version::${{ needs.check-changelog.outputs.next_version }}"
           echo "::set-output name=release_notes::${{ needs.extract-release-notes.outputs.release_notes }}"
