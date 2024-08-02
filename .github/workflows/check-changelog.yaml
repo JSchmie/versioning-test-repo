@@ -311,7 +311,7 @@ jobs:
           echo "$release_notes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-           echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+           echo "test<<EOF" >> $GITHUB_OUTPUT
           echo "$release_notes" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           # echo "::set-output name=release_notes::$release_notes"
@@ -319,7 +319,9 @@ jobs:
       - name: Print Release Notes
         run: 
           echo "${{ env.RELEASE_NOTES }}"
-          
+      - name: Print Release Notes from output
+        run: 
+          echo "${{ steps.output.test }}"
   collect-outputs:
     runs-on: ubuntu-latest
     if: always()
@@ -327,13 +329,13 @@ jobs:
     outputs:
       current_version: ${{ needs.check-changelog.outputs.latest_tag }}
       next_version: ${{ needs.check-changelog.outputs.next_version }}
-      release_notes: ${{ needs.extract-release-notes.outputs.RELEASE_NOTES }}
+      release_notes: ${{ needs.extract-release-notes.outputs.test }}
     steps:
       - name: Output Results
         run: |
           echo "Current Version: ${{ needs.check-changelog.outputs.latest_tag }}"
           echo "Next Version: ${{ needs.check-changelog.outputs.next_version }}"
-          echo "Release Notes: ${{ needs.extract-release-notes.outputs.RELEASE_NOTES }}"
+          echo "Release Notes: ${{ needs.extract-release-notes.outputs.test }}"
           echo "::set-output name=current_version::${{ needs.check-changelog.outputs.latest_tag }}"
           echo "::set-output name=next_version::${{ needs.check-changelog.outputs.next_version }}"
           echo "::set-output name=release_notes::${{ needs.extract-release-notes.outputs.release_notes }}"
