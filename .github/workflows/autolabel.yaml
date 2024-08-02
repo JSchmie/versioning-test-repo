@@ -46,3 +46,6 @@ jobs:
       - name: Print Release Notes
         run: |
           echo "Release Notes: ${{ needs.check-changelog.outputs.release_notes }}"
+      - name: print from Env
+        run: |
+          echo "Release Notes from ENV: ${{ env.RELEASE_NOTES }}"
