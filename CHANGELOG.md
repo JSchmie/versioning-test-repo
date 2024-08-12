@@ -2,6 +2,8 @@
 
 ## [0.2.14.pre] - 2024-08-12
 
+- sum up stuff [#182](https://github.com/JSchmie/versioning-test-repo/pull/182)
+
 - added function to print stuff [#181](https://github.com/JSchmie/versioning-test-repo/pull/181)
 
 
