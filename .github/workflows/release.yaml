@@ -18,14 +18,18 @@ jobs:
 
       - name: Get Latest Tag
         id: get-latest-tag
-        if: github.event_name == 'workflow_run' 
+        if: |
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion  == 'success'
         run: |
           git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "::set-output name=latest_tag::$latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Release from Workflow Run
-        if: github.event_name == 'workflow_run'
+        if: |
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion  == 'success'
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true 
