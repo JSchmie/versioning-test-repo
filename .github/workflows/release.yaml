@@ -10,11 +10,20 @@ on:
       - completed
 
 jobs: 
+
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure all history is fetched
+      
+      - name: Echo Branch Name 
+        run: |
+          branch_name=$(git branch -r --contains $GITHUB_SHA | grep -v '\->' | head -n 1 | sed 's/.*origin\///')
+          echo "Branch name: $branch_name"
+        
 
       - name: Get Latest Tag
         id: get-latest-tag
@@ -48,3 +57,4 @@ jobs:
         with:
           file: CHANGELOG.md
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          
