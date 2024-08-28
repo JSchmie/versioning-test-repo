@@ -1,4 +1,4 @@
-name: Semantic Versioning for Tags
+name: Semantic Versioning for Patches
 
 on:
   pull_request:
@@ -7,19 +7,8 @@ on:
       - main
 
 jobs:
-
-  check-changelog:
-    if: |
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.base.ref == 'main' &&
-      contains(github.event.pull_request.labels.*.name, 'release')
-    uses: ./.github/workflows/check-changelog.yaml
-    with: 
-      remove_pre_tag: true
-      target_branch: ${{ github.event.pull_request.base.ref }}
-  
   bump-version:
-    needs: check-changelog
+    if: contains(github.event.pull_request.labels.*.name, 'patch')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -28,58 +17,45 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.base.ref }}
+      
+      - name: Get Latest Tag
+        id: get-latest-tag
+        run: |
+          # Get the latest tag, or initialize to v0.0.0 if no tags are found
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+          echo "::set-output name=latest_tag::$latest_tag"
 
+      - name: Determine Next Patch Version
+        id: determine-next-version
+        run: |
+          latest_tag="${{ steps.get-latest-tag.outputs.latest_tag }}"
+
+          # Split the latest tag into parts
+          IFS='.' read -r -a parts <<< "${latest_tag#v}"
+          major=${parts[0]}
+          minor=${parts[1]}
+          patch=${parts[2]}
+          patch=$((patch + 1))
+          next_version="v$major.$minor.$patch"
+
+          echo "::set-output name=next_version::$next_version"
+          echo "Next version determined: $next_version"
+  
       - name: Bump Version and Tag
         id: bump_version
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          latest_tag="${{ needs.check-changelog.outputs.current_version }}"
-          next_version="${{ needs.check-changelog.outputs.next_version }}"
+          latest_tag="${{ steps.get-latest-tag.outputs.latest_tag }}"
+          next_version="${{ steps.determine-next-version.outputs.next_version }}"
 
-          echo "Bumping version from $latest_tag to v$next_version"
+          echo "Bumping version from $latest_tag to $next_version"
 
           # Tag the new version
-          git tag "v$next_version"
+          git tag "$next_version"
 
           # Configure GitHub token authentication
           git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
 
           # Push the new tag to the remote repository
-          git push origin "v$next_version"
-          
-      - name: Extract Release Notes
-        run: |
-          version="${{ needs.check-changelog.outputs.next_version }}"
-          clean_version="${version#v}"
-          echo "Extracting release notes for version: $clean_version"
-
-
-          release_notes=$(awk -v version="$clean_version" '
-            BEGIN { flag=0 }
-            # Start flagging when the version section is found
-            $0 ~ "^## \\[" version "\\]" || $0 ~ "^## \\[" version "\\.pre\\]" { flag=1; next }  # Start printing after the header
-            # Stop flagging when the next version section is found
-            $0 ~ "^## \\[.*\\]" { if (flag) exit }
-            flag { print }  # Print lines while flag is 1
-          ' CHANGELOG.md)
-
-          echo "Extracted release notes:"
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$release_notes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "::set-output name=release_notes::$release_notes"
-
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          tag_name: "v${{ needs.check-changelog.outputs.next_version }}"
-          release_name: Release v${{ needs.check-changelog.outputs.next_version }}
-          body: ${{ env.RELEASE_NOTES }}
-          draft: false
-          prerelease: false
-      
-
-
+          git push origin "$next_version"
