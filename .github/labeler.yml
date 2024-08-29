@@ -33,7 +33,7 @@ workflows:
   - changed-files:
       - any-glob-to-any-file:
         - '.github/workflows/*'
-        - '.github/labeler.yml'
+        - '.github/*'
 
 github: 
   - changed-files:
