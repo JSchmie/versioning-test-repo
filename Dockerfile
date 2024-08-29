@@ -2,4 +2,4 @@ FROM busybox
 
 
 CMD [ "ls","-lah","/" ]
-ddfgdfdfg
+RUN Magic?
