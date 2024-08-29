@@ -65,7 +65,7 @@ jobs:
     needs: [build-on-workflow, build-on-tag]
     if: |
       always() && 
-      (needs.build-on-workflow.result == 'success' || needs.build-on-tag.result )
+      (needs.build-on-workflow.result == 'success' || needs.build-on-tag.result == 'success' )
     steps:
       - name: Checkout
         uses: actions/checkout@v4
