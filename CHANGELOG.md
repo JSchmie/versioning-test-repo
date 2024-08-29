@@ -7,6 +7,8 @@
 * Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/183
 * Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/184
 * release checks workflworun to run rather then be skipped by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/185
+* Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/186
+* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/187
 
 
 **Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
