@@ -1,21 +1,3 @@
-<a name="v0.3.0"></a>
-# [v0.3.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.0) - 28 Aug 2024
-
-## What's Changed
-* added function to print stuff by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/181
-* sum up stuff by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/182
-* Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/183
-* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/184
-* release checks workflworun to run rather then be skipped by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/185
-* Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/186
-* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/187
-
-
-**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
-
-[Changes][v0.3.0]
-
-
 <a name="v0.2.13"></a>
 # [Release v0.2.13](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.13) - 02 Aug 2024
 
@@ -238,7 +220,6 @@ Hey there, audio adventurers and transcription titans! We've got a WHALE of an u
 [Changes][v0.0.1]
 
 
-[v0.3.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
 [v0.2.13]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.12...v0.2.13
 [v0.2.12]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.11...v0.2.12
 [v0.2.11]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.10...v0.2.11
