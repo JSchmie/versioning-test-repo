@@ -1,3 +1,18 @@
+<a name="v0.3.1"></a>
+# [v0.3.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.1) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v0.3.1 -->
+
+## What's Changed
+### Bug Fixes 🐛
+* Awesome text bug fix by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/196
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.0...v0.3.1
+
+[Changes][v0.3.1]
+
+
 <a name="v0.3.0"></a>
 # [v0.3.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.0) - 29 Aug 2024
 
@@ -240,6 +255,7 @@ Hey there, audio adventurers and transcription titans! We've got a WHALE of an u
 [Changes][v0.0.1]
 
 
+[v0.3.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
 [v0.2.13]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.12...v0.2.13
 [v0.2.12]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.11...v0.2.12
