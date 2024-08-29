@@ -1,3 +1,48 @@
+<a name="v1.0.0"></a>
+# [v1.0.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v1.0.0) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v1.0.0 -->
+
+## What's Changed
+### New Features 🎉
+* added feature test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/198
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v1.0.0
+
+[Changes][v1.0.0]
+
+
+<a name="v0.4.1"></a>
+# [v0.4.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.4.1) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v0.4.1 -->
+
+## What's Changed
+### Bug Fixes 🐛
+* insane complicated bug fix by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/202
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.0...v0.4.1
+
+[Changes][v0.4.1]
+
+
+<a name="v0.4.0"></a>
+# [v0.4.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.4.0) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v0.4.0 -->
+
+## What's Changed
+### New Features 🎉
+* added feature test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/198
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v0.4.0
+
+[Changes][v0.4.0]
+
+
 <a name="v0.3.1"></a>
 # [v0.3.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.1) - 29 Aug 2024
 
@@ -255,6 +300,9 @@ Hey there, audio adventurers and transcription titans! We've got a WHALE of an u
 [Changes][v0.0.1]
 
 
+[v1.0.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.1...v1.0.0
+[v0.4.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.0...v0.4.1
+[v0.4.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
 [v0.2.13]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.12...v0.2.13

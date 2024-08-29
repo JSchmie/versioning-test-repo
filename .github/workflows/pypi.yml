@@ -1,10 +1,6 @@
 name: Test CI PyPi Workflow
 
 on:
-  workflow_run:
-    workflows: [Semantic Versioning for Patches]
-    types:
-      - completed
   
   pull_request_target:
     branches:
@@ -35,8 +31,6 @@ jobs:
     if: |
       (github.event_name == 'workflow_dispatch' &&
        github.event.inputs.test == 'true') ||
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion  == 'success') ||
       (github.event_name == 'pull_request_target' &&
        github.event.pull_request.merged &&
        contains(github.event.pull_request.labels.*.name, 'release')) ||
@@ -94,9 +88,7 @@ jobs:
           always() &&
           (( needs.Build-and-publish-to-Test-PyPI.result  != 'failure' &&
            needs.Test-PyPi-install.result != 'failure' ) &&
-          (( github.event_name == 'workflow_run' &&
-          github.event.workflow_run.conclusion  == 'success' ) ||
-          (github.event_name == 'workflow_dispatch' &&
+          ((github.event_name == 'workflow_dispatch' &&
           github.event.inputs.publish_to_pypi == 'true') ||
           (github.event_name == 'pull_request_target' &&
           github.event.pull_request.merged &&

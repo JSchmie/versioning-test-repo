@@ -1,14 +1,9 @@
 name: Test Docker Workflow
 
 on:
-    workflow_run:
-        workflows: [Semantic Versioning for Patches]
-        types:
-            - completed
-
     pull_request_target:
         branches:
-            - develop
+            - main
         types:
             - closed
     
@@ -20,10 +15,8 @@ on:
 
 jobs:
     Build-and-publish-to-Dockerhub:
-        if: | 
-            github.event_name == 'workflow_dispatch' ||
-            (github.event_name == 'workflow_run' &&
-            github.event.workflow_run.conclusion  == 'success') ||
+        if: |
+            (github.event_name == 'workflow_dispatch') ||
             (github.event_name == 'pull_request_target' &&
             github.event.pull_request.merged &&
             contains(github.event.pull_request.labels.*.name, 'docker')) ||
