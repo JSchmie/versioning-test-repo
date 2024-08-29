@@ -4,6 +4,7 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
+      - ignore-pr-for-release:
       - workflows
       - github
       - documentation

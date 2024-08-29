@@ -46,6 +46,6 @@ feature:
 patch:
   - head-branch: ['^patch', 'patch', '^bug', 'bug']
 
-ignore-for-release: 
+ignore-pr-for-release: 
   - head-branch: ['develop']
   - base-branch: ['main']
