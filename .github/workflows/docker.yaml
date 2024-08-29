@@ -11,7 +11,11 @@ on:
             - develop
         types:
             - closed
-
+    
+    push:
+        tags:
+            - 'v*.*.*'
+            
     workflow_dispatch:
 
 jobs:
