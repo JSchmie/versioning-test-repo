@@ -4,6 +4,9 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
+      - workflows
+      - github
+      - documentation
     authors:
       - octocat
       - github-actions[bot]
