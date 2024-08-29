@@ -40,9 +40,6 @@ jobs:
           generate_release_notes: true 
           append_body: true
           tag_name: ${{ steps.get-latest-tag.outputs.latest_tag }}
-          files: |
-            src/*
-            LICENSE
 
   build-on-tag:
     runs-on: ubuntu-latest
