@@ -43,8 +43,6 @@ jobs:
   
       - name: Bump Version and Tag
         id: bump_version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           latest_tag="${{ steps.get-latest-tag.outputs.latest_tag }}"
           next_version="${{ steps.determine-next-version.outputs.next_version }}"
