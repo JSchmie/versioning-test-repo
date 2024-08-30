@@ -11,12 +11,6 @@ name: Publish Docker image
 
 on:
 
-  pull_request_target:
-    branches:
-      - develop
-    types:
-      - closed
-
   push:
     tags:
       - v*
@@ -41,6 +35,35 @@ jobs:
       #     username: ${{ secrets.DOCKERHUB_USERNAME }}
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      #   # only if pull request
+      # - name: Get Latest Tag
+      #   id: get-latest-tag
+      #   run: |
+      #     # Get the latest tag, or initialize to v0.0.0 if no tags are found
+      #     latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+      #     echo "::set-output name=latest_tag::$latest_tag"
+
+      # - name: Determine Next Patch Version
+      #   id: determine-next-version
+      #   run: |
+      #     latest_tag="${{ steps.get-latest-tag.outputs.latest_tag }}"
+
+      #     # Split the latest tag into parts
+      #     IFS='.' read -r -a parts <<< "${latest_tag#v}"
+      #     major=${parts[0]}
+      #     minor=${parts[1]}
+      #     patch=${parts[2]}
+      #     patch=$((patch + 1))
+      #     next_version="v$major.$minor.$patch"
+
+      #     echo "::set-output name=next_version::$next_version"
+      #     echo "Next version determined: $next_version"
+
+      - name: Get Version Tag
+        run: |
+          version=$(git describe --tags --abbrev=0)
+          echo "Version tag: $version"
+        
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -48,7 +71,7 @@ jobs:
           images: my-docker-hub-namespace/my-docker-hub-repository
 
       - name: print labels
-        run: | 
+        run: |
           echo "Doocker tags ${{ steps.meta.outputs.tags }}"
           echo "Doocker labels ${{ steps.meta.outputs.labels }}"
 
