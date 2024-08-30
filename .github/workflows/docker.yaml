@@ -38,7 +38,7 @@ jobs:
       - name: Get Version Tag
         id: version
         run: |
-          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
           
       - name: Test name and tag
         run: | 
