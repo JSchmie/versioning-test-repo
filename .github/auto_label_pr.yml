@@ -20,7 +20,7 @@ docker:
 release:
   - changed-files:
     - any-glob-to-any-file:
-      - 'src/**'
+      - 'scraibe_webui/**'
       - 'pyproject.toml'
       - 'LICENCE'
 
@@ -39,6 +39,12 @@ github:
   - changed-files:
       - any-glob-to-any-file:
         - '.gitignore'
+        - '.github/ISSUE_TEMPLATE/*'
+
+dependencies: 
+  - changed-files:
+      - any-glob-to-any-file:
+        - 'requirements.txt'
 
 feature:
  - head-branch: ['^feature', 'feature']
