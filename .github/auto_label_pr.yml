@@ -20,7 +20,7 @@ docker:
 release:
   - changed-files:
     - any-glob-to-any-file:
-      - 'scraibe_webui/**'
+      - 'src/**'
       - 'pyproject.toml'
       - 'LICENCE'
 
