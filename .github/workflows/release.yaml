@@ -4,10 +4,6 @@ on:
   push:
     tags:
       - 'v*.*.*'
-  workflow_run:
-    workflows: [Semantic Versioning for Patches]
-    types:
-      - completed
 
 jobs: 
 
@@ -40,9 +36,6 @@ jobs:
           generate_release_notes: true 
           append_body: true
           tag_name: ${{ steps.get-latest-tag.outputs.latest_tag }}
-          files: |
-            src/*
-            LICENSE
 
   build-on-tag:
     runs-on: ubuntu-latest
