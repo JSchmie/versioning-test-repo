@@ -1,3 +1,24 @@
+<a name="v1.0.1"></a>
+# [v1.0.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v1.0.1) - 30 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at c86c1b250d20be1ae6b13cf4bf8cf74eba082501 -->
+
+## What's Changed
+### New Features 🎉
+* adding a feature by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/213
+### Bug Fixes 🐛
+* fixing bug by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/212
+### Other Changes 🔧
+* Typo in docs by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/214
+
+## New Contributors
+* [@mahenning](https://github.com/mahenning) made their first contribution in https://github.com/JSchmie/versioning-test-repo/pull/216
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.1...v1.0.1
+
+[Changes][v1.0.1]
+
+
 <a name="v1.0.0"></a>
 # [v1.0.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v1.0.0) - 29 Aug 2024
 
@@ -300,6 +321,7 @@ Hey there, audio adventurers and transcription titans! We've got a WHALE of an u
 [Changes][v0.0.1]
 
 
+[v1.0.1]: https://github.com/JSchmie/versioning-test-repo/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.1...v1.0.0
 [v0.4.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v0.4.0
