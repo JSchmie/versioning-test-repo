@@ -55,9 +55,9 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: ${{ steps.meta.outputs.tags }}
-          echo "Docker tags: ${{ steps.meta.outputs.tags }}"
+          echo "Doocker tags ${{ steps.meta.outputs.tags }}"
           labels: ${{ steps.meta.outputs.labels }}
-          echo "Docker labels: ${{ steps.meta.outputs.labels }}"
+          echo "Doocker labels ${{ steps.meta.outputs.labels }}"
       
       
       # - name: Generate artifact attestation
