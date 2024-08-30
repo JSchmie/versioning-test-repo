@@ -38,11 +38,11 @@ jobs:
       - name: Get Version Tag
         id: version
         run: |
-          echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
           
       - name: Test name and tag
         run: | 
-          echo "${{ env.image }}:latest,${{ env.image }}:${{ steps.version.outputs.version }}"
+          echo "${{ env.image }}:latest,${{ env.image }}:${{ steps.version.outputs.tag }}"
           
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -57,7 +57,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: false
-          tags: "${{ env.image }}:latest,${{ env.image }}:${{ steps.version.outputs.version }}"
+          tags: "${{ env.image }}:latest,${{ env.image }}:${{ steps.version.outputs.tag }}"
       
       # - name: Generate artifact attestation
       #   uses: actions/attest-build-provenance@v1
