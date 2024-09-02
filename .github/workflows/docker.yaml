@@ -62,6 +62,18 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ${{ env.image }}:latest
+
+      - name: Scan image
+        id: scan
+        uses: anchore/scan-action@v3
+        with:
+          image: ${{ env.image }}:latest
+          fail-build: false
+      
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
       # - name: Generate artifact attestation
       #   uses: actions/attest-build-provenance@v1
       #   with:
