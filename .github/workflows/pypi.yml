@@ -22,6 +22,7 @@ on:
 
 jobs:
   Build-and-publish-to-Test-PyPI:
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
