@@ -66,11 +66,7 @@ jobs:
           echo "Package installed successfully"
           echo "Testing package installation"
           echo "Package version: 1.0.0"
-      - name: Fail this step intentionally
-        run: |
-          echo "This step will fail intentionally."
-          exit 1  # Causes the step to fail
-
+          
   Publish-to-PyPi:
       name: Publish to PyPI
       runs-on: ubuntu-latest
