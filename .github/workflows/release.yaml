@@ -6,7 +6,6 @@ on:
       - 'v*.*.*'
 
 jobs: 
-
   build-on-workflow:
     runs-on: ubuntu-latest
     if: |
@@ -65,11 +64,6 @@ jobs:
         with: 
           fetch-depth: 0  # Ensure all history is fetched
           ref: main
-  
-      - name: Set Git Author to GitHub Actions Bot
-        run: |
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
   
       - name: Write CHANGELOG.md      
         uses: rhysd/changelog-from-release/action@v3

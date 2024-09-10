@@ -1,106 +1,332 @@
-# Changelog
+<a name="v1.0.0"></a>
+# [v1.0.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v1.0.0) - 29 Aug 2024
 
-## [0.2.14] - 2024-08-12
+<!-- Release notes generated using configuration in .github/release.yml at v1.0.0 -->
 
-- sum up stuff [#182](https://github.com/JSchmie/versioning-test-repo/pull/182)
+## What's Changed
+### New Features 🎉
+* added feature test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/198
 
-- added function to print stuff [#181](https://github.com/JSchmie/versioning-test-repo/pull/181)
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v1.0.0
+
+[Changes][v1.0.0]
 
 
+<a name="v0.4.1"></a>
+# [v0.4.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.4.1) - 29 Aug 2024
 
-## [0.2.13] - 2024-08-01
+<!-- Release notes generated using configuration in .github/release.yml at v0.4.1 -->
+
+## What's Changed
+### Bug Fixes 🐛
+* insane complicated bug fix by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/202
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.0...v0.4.1
+
+[Changes][v0.4.1]
+
+
+<a name="v0.4.0"></a>
+# [v0.4.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.4.0) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v0.4.0 -->
+
+## What's Changed
+### New Features 🎉
+* added feature test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/198
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v0.4.0
+
+[Changes][v0.4.0]
+
+
+<a name="v0.3.1"></a>
+# [v0.3.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.1) - 29 Aug 2024
+
+<!-- Release notes generated using configuration in .github/release.yml at v0.3.1 -->
+
+## What's Changed
+### Bug Fixes 🐛
+* Awesome text bug fix by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/196
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.0...v0.3.1
+
+[Changes][v0.3.1]
+
+
+<a name="v0.3.0"></a>
+# [v0.3.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.3.0) - 29 Aug 2024
+
+## What's Changed
+* added function to print stuff by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/181
+* sum up stuff by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/182
+* Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/183
+* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/184
+* release checks workflworun to run rather then be skipped by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/185
+* Test by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/186
+* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/187
+* ref main by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/188
+* Develop by [@JSchmie](https://github.com/JSchmie) in https://github.com/JSchmie/versioning-test-repo/pull/189
+
+
+**Full Changelog**: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
+
+[Changes][v0.3.0]
+
+
+<a name="v0.2.13"></a>
+# [Release v0.2.13](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.13) - 02 Aug 2024
 
 - Develop [#180](https://github.com/JSchmie/versioning-test-repo/pull/180)
 
 - Test [#179](https://github.com/JSchmie/versioning-test-repo/pull/179)
 
+[Changes][v0.2.13]
 
 
-## [0.2.12] - 2024-08-01
-
-- Some very important release notes [#178](https://github.com/JSchmie/versioning-test-repo/pull/178)
-
-- Test [#177](https://github.com/JSchmie/versioning-test-repo/pull/177)
-
+<a name="v0.2.12"></a>
+# [Release v0.2.12](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.12) - 01 Aug 2024
 
 
 
-## [0.2.11] - 2024-08-01
+[Changes][v0.2.12]
 
-- Develop [#176](https://github.com/JSchmie/versioning-test-repo/pull/176)
 
-- more code changes [#175](https://github.com/JSchmie/versioning-test-repo/pull/175)
-
-## [0.2.10] - 2024-08-01
-
-- Develop [#173](https://github.com/JSchmie/versioning-test-repo/pull/173)
-
-- get correct release notes [#172](https://github.com/JSchmie/versioning-test-repo/pull/172)
-
-## [0.2.9] - 2024-07-31
-
-- Develop [#170](https://github.com/JSchmie/versioning-test-repo/pull/170)
-
-- Develop [#170](https://github.com/JSchmie/versioning-test-repo/pull/170)
-
-- create target_branch input to the actions [#169](https://github.com/JSchmie/versioning-test-repo/pull/169)
+<a name="v0.2.11"></a>
+# [Release v0.2.11](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.11) - 01 Aug 2024
 
 
 
-## [0.2.8] - 2024-07-31
+[Changes][v0.2.11]
 
-- Develop [#168](https://github.com/JSchmie/versioning-test-repo/pull/168)
 
-- More changes to the Actions [#167](https://github.com/JSchmie/versioning-test-repo/pull/167)
+<a name="v0.2.10"></a>
+# [Release v0.2.10](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.10) - 01 Aug 2024
 
-- update labler to debug [#166](https://github.com/JSchmie/versioning-test-repo/pull/166)
 
-- Develop [#165](https://github.com/JSchmie/versioning-test-repo/pull/165)
 
-- Test [#164](https://github.com/JSchmie/versioning-test-repo/pull/164)
+[Changes][v0.2.10]
 
-## [0.2.7] - 2024-06-27
+
+<a name="v0.2.9"></a>
+# [Release v0.2.9](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.9) - 31 Jul 2024
+
+
+
+[Changes][v0.2.9]
+
+
+<a name="v0.2.8"></a>
+# [Release v0.2.8](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.8) - 31 Jul 2024
+
+
+
+[Changes][v0.2.8]
+
+
+<a name="v0.2.7"></a>
+# [Release v0.2.7](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.7) - 02 Jul 2024
+
 - Fixed PyPI Upload yaml.
-    - Now tiggers the test and PyPI upload seperatly when using workflow dispatch. 
-## [0.2.6] - 2024-06-27
+    - Now tiggers the test and PyPI upload seperatly when using workflow dispatch.
+
+[Changes][v0.2.7]
+
+
+<a name="v0.2.6"></a>
+# [Release v0.2.6](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.6) - 28 Jun 2024
 
 - added a PyPI action
 - updated semver action to work with labels
 - added autolabel acrtion to automatically create labels based on changed files
 
-## [0.2.2] - 2024-06-10
+[Changes][v0.2.6]
+
+
+<a name="v0.2.5"></a>
+# [Release v0.2.5](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.5) - 10 Jun 2024
+
+
+
+[Changes][v0.2.5]
+
+
+<a name="v0.2.4"></a>
+# [Release v0.2.4](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.4) - 10 Jun 2024
+
+
+
+[Changes][v0.2.4]
+
+
+<a name="v0.2.3"></a>
+# [Release v0.2.3](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.3) - 10 Jun 2024
+
+
+
+[Changes][v0.2.3]
+
+
+<a name="v0.2.2"></a>
+# [Release v0.2.2](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.2) - 10 Jun 2024
 
 - added token to checkout in check_version.yaml
 
-## [0.2.1] - 2024-05-30
+[Changes][v0.2.2]
+
+
+<a name="v0.2.1"></a>
+# [Release v0.2.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.1) - 31 May 2024
 
 - added check for docs
 
-## [0.2.0] - 2024-05-30
+[Changes][v0.2.1]
+
+
+<a name="v0.2.0"></a>
+# [Release v0.2.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.2.0) - 30 May 2024
 
 Hey there, audio adventurers and transcription titans! We've got a WHALE of an update for you! 🐋 Introducing the latest and greatest version of our CLI, lovingly nicknamed the 'Whispering Walrus' Edition. Why? Because it's BIG, it's AWESOME, and it talks...a LOT! 🗣️
 
-## [0.1.3] - 2024-05-30
+[Changes][v0.2.0]
+
+
+<a name="v0.1.3"></a>
+# [Release v0.1.3](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.1.3) - 30 May 2024
 
 - We are just bumbping the version
 
-## [0.1.2] - 2024-05-30
+[Changes][v0.1.3]
+
+
+<a name="v0.1.2"></a>
+# [Release v0.1.2](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.1.2) - 30 May 2024
 
 - Something new
 
-## [0.1.1] - 2024-05-30
+[Changes][v0.1.2]
+
+
+<a name="v0.1.1"></a>
+# [Release v0.1.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.1.1) - 30 May 2024
 
 - Added new CI to check Realse notes before merge
 - Getting close to realse version v1.0.0
 
-## [0.1.0] - 2024-05-30
+[Changes][v0.1.1]
+
+
+<a name="v0.1.0"></a>
+# [Release v0.1.0](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.1.0) - 30 May 2024
 
 - Added feature XYZ
 - Improved ABC
-- update version
+- update version 
 - something extra
 - change ci to get informations abou the version
 
-## [Unreleased]
+[Changes][v0.1.0]
 
+
+<a name="v0.0.5"></a>
+# [Release v0.0.5](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.0.5) - 30 May 2024
+
+
+
+[Changes][v0.0.5]
+
+
+<a name="v0.0.4"></a>
+# [Release v0.0.4](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.0.4) - 30 May 2024
+
+## [0.1.0] - 2024-05-30
+- Added feature XYZ
+- Improved ABC
+- update version 
+
+# Changelog
+
+## [Unreleased]
 - Initial setup and testing
+
+
+[Changes][v0.0.4]
+
+
+<a name="v0.0.3"></a>
+# [Release v0.0.3](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.0.3) - 30 May 2024
+
+## [0.1.0] - 2024-05-30
+- Added feature XYZ
+- Improved ABC
+
+# Changelog
+
+## [Unreleased]
+- Initial setup and testing
+
+
+[Changes][v0.0.3]
+
+
+<a name="v0.0.2"></a>
+# [Release v0.0.2](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.0.2) - 30 May 2024
+
+## [0.1.0] - 2024-05-30
+- Added feature XYZ
+- Improved ABC
+
+# Changelog
+
+## [Unreleased]
+- Initial setup and testing
+
+
+[Changes][v0.0.2]
+
+
+<a name="v0.0.1"></a>
+# [Release v0.0.1](https://github.com/JSchmie/versioning-test-repo/releases/tag/v0.0.1) - 30 May 2024
+
+# Changelog
+
+## [Unreleased]
+- Initial setup and testing
+
+[Changes][v0.0.1]
+
+
+[v1.0.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.1...v1.0.0
+[v0.4.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.4.0...v0.4.1
+[v0.4.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.1...v0.4.0
+[v0.3.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.3.0...v0.3.1
+[v0.3.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.13...v0.3.0
+[v0.2.13]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.12...v0.2.13
+[v0.2.12]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.11...v0.2.12
+[v0.2.11]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.10...v0.2.11
+[v0.2.10]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.9...v0.2.10
+[v0.2.9]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.8...v0.2.9
+[v0.2.8]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.7...v0.2.8
+[v0.2.7]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.6...v0.2.7
+[v0.2.6]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.5...v0.2.6
+[v0.2.5]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.4...v0.2.5
+[v0.2.4]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.3...v0.2.4
+[v0.2.3]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.2...v0.2.3
+[v0.2.2]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.1...v0.2.2
+[v0.2.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.2.0...v0.2.1
+[v0.2.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.1.3...v0.2.0
+[v0.1.3]: https://github.com/JSchmie/versioning-test-repo/compare/v0.1.2...v0.1.3
+[v0.1.2]: https://github.com/JSchmie/versioning-test-repo/compare/v0.1.1...v0.1.2
+[v0.1.1]: https://github.com/JSchmie/versioning-test-repo/compare/v0.1.0...v0.1.1
+[v0.1.0]: https://github.com/JSchmie/versioning-test-repo/compare/v0.0.5...v0.1.0
+[v0.0.5]: https://github.com/JSchmie/versioning-test-repo/compare/v0.0.4...v0.0.5
+[v0.0.4]: https://github.com/JSchmie/versioning-test-repo/compare/v0.0.3...v0.0.4
+[v0.0.3]: https://github.com/JSchmie/versioning-test-repo/compare/v0.0.2...v0.0.3
+[v0.0.2]: https://github.com/JSchmie/versioning-test-repo/compare/v0.0.1...v0.0.2
+[v0.0.1]: https://github.com/JSchmie/versioning-test-repo/tree/v0.0.1
+
+<!-- Generated by https://github.com/rhysd/changelog-from-release v3.7.2 -->
