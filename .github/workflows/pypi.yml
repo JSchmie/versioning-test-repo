@@ -19,10 +19,6 @@ on:
         description: "Publish to PyPI"
         default: false
         type: boolean
-      test_conditions_of_ci:
-        description: "Test boolean conditions of this Action for debugging"
-        default: false
-        type: boolean
 
 jobs:
   Build-and-publish-to-Test-PyPI:
@@ -70,6 +66,10 @@ jobs:
           echo "Package installed successfully"
           echo "Testing package installation"
           echo "Package version: 1.0.0"
+      - name: Fail this step intentionally
+        run: |
+          echo "This step will fail intentionally."
+          exit 1  # Causes the step to fail
 
   Publish-to-PyPi:
       name: Publish to PyPI
@@ -107,57 +107,3 @@ jobs:
             else
                 dunamai from git --format "v{base}.dev{distance}+{commit}"
             fi
-  echo-conditions:
-    if: github.event.inputs.test_conditions_of_ci == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo Logic Conditions
-        run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "Publish to PyPI input: ${{ github.event.inputs.publish_to_pypi }}"
-          echo "Test input: ${{ github.event.inputs.test }}"
-          echo "Previous workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
-          echo "Pull request merged: ${{ github.event.pull_request.merged }}"
-          echo "Labels of the Pull Request: ${{ github.event.pull_request.labels.*.name }}"
-          echo "Labels realese in PR?: ${{ contains(github.event.pull_request.labels.*.name, 'release') }}"
-          
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.publish_to_pypi }}" == "true" ]]; then
-            echo "Condition 1: Manual dispatch with publish_to_pypi is true"
-          fi
-          if [[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
-            echo "Condition 2: Workflow run with successful conclusion"
-          fi
-          if [[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
-            echo "Condition 3: Pull request merged"
-          fi
-          
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ]]; then
-            echo "Condition 4: Manual dispatch with test is true"
-          fi
-          if [[ ("${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.publish_to_pypi }}" == "true") || ("${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success") || ("${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true") ]]; then
-            echo "Overall condition for publish-to-pypi: True"
-          else
-            echo "Overall condition for publish-to-pypi: False"
-          fi
-          
-          if [[ ("${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true") || ("${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success") ]]; then
-            echo "Overall condition for running tests: True"
-          else
-            echo "Overall condition for running tests: False"
-          fi
-
-          CONDITION1=$([[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.test }}" == "true" ]] && echo "true" || echo "false")
-          CONDITION2=$([[ "${{ github.event_name }}" == "workflow_run" && "${{ github.event.workflow_run.conclusion }}" == "success" ]] && echo "true" || echo "false")
-          CONDITION3=$([[ "${{ github.event_name }}" == "pull_request_target" && "${{ github.event.pull_request.merged }}" == "true" && "${{ contains(github.event.pull_request.labels.*.name, 'release') }}" == "true" ]] && echo "true" || echo "false")
-          CONDITION4=$([[ "${{ contains(github.event.pull_request.labels.*.name, 'release') }}" == "true" ]] && echo "true" || echo "false")
-          
-          echo "Condition 1 (workflow_dispatch with test=true): $CONDITION1"
-          echo "Condition 2 (workflow_run with success): $CONDITION2"
-          echo "Condition 3 (pull_request merged): $CONDITION3"
-          echo "Condition 4 (release label): $CONDITION4"
-          
-          if [[ "$CONDITION1" == "true" || "$CONDITION2" == "true" || "$CONDITION3" == "true" || "$CONDITION4" == "true" ]]; then
-            echo "Overall condition for running: True"
-          else
-            echo "Overall condition for running: False"
-          fi
