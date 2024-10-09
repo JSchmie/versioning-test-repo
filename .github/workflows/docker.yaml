@@ -47,7 +47,7 @@ jobs:
         run: ls -lah
       
       - name: Overwrite label tag
-        run: sed -i 's/LABEL version=.*\n/LABEL version="'${{ steps.version.outputs.tag }}'"/' Dockerfile
+        run: sed -i 's/LABEL version=".*"/LABEL version="'${{ steps.version.outputs.tag }}'"/' Dockerfile
 
       # Verify changes
       - name: Cat Dockerfile to confirm changes
