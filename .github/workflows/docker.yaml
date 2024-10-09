@@ -43,6 +43,16 @@ jobs:
         run: | 
           echo "${{ env.image }}:latest,${{ env.image }}:${{ steps.version.outputs.tag }}"
           
+      - name: get file structure
+        run: ls -lah
+      
+      - name: Overwrite label tag
+        run: sed -i 's/LABEL version=.*\n/LABEL version="'${{ steps.version.outputs.tag }}'"/' Dockerfile
+
+      # Verify changes
+      - name: Cat Dockerfile to confirm changes
+        run: cat Dockerfile
+      
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@v3
       #   with:
